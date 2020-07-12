@@ -1,0 +1,12 @@
+# Build related files  or  build result 
+
+makefile
+project/
+
+obj/
+bin/
+
+
+# OS Files
+
+.DS_Store
