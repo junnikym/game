@@ -1,11 +1,8 @@
-# Build related files  or  build result 
+# Build related file or directory
 
-makefile
 project/
-
 obj/
 bin/
-
 
 # OS Files
 
