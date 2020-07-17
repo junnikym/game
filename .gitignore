@@ -3,6 +3,12 @@
 project/
 obj/
 bin/
+CMakeCache.txt
+cmake_install.cmake
+CMakeFiles/
+lib/
+Makefile
+main
 
 # OS Files
 
