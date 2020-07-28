@@ -1,8 +1,6 @@
 #ifndef SYSTEM_HPP
 #define SYSTEM_HPP
 
-#include "common.hpp"
-
 #include "graphics.hpp"
 
 namespace graphics { 

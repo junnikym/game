@@ -4,7 +4,7 @@ namespace graphics {
 
 #ifdef __OPENGL__
 
-INPUT g_input_msger;
+Input g_input_msger;
 
 void err_callback(int err_code, const char* err_description) {	
 	fprintf(stderr, "Error : %s\n", err_description);				// 에러를 출력

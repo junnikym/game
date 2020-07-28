@@ -1,8 +1,7 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+#ifndef GRAPHICS_HPP
+#define GRAPHICS_HPP
 
-#include "common.hpp"
-
+#include "model.hpp"
 #include "callback.hpp"
 
 namespace graphics {

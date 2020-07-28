@@ -8,7 +8,7 @@ namespace graphics {
 
 #ifdef __OPENGL__
 
-extern INPUT g_input_msger;
+extern Input g_input_msger;
 
 void err_callback(int err_code, const char* err_description);
 

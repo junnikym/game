@@ -1,46 +1,57 @@
-#ifndef COMMON_H
+#ifndef COMMON_HPP
+#define COMMON_HPP
 
-/**************************
- * Use which libaray
- **************************/
-#define __OPENGL__
+	/**************************
+	 * Use which libaray
+	 **************************/
+	#define __OPENGL__
 
-#include <iostream>
-#include <algorithm>
-#include <string>
+	#include <iostream>
+	#include <algorithm>
+	#include <string>
 
-#include <vector>
+	#include <vector>
 
-#include <fstream>
-#include <sstream>
+	#include <fstream>
+	#include <sstream>
 
-#include <cstdio>
-#include <cstring>
+	#include <cstdio>
+	#include <cstring>
+	#include <cstddef>
 
-using namespace std;
+	using namespace std;
 
-#ifdef _WIN32			// at windows OS
+	#ifdef _WIN32			// at windows OS
 
-	#include <windwos.h>
+		#include <windwos.h>
 
-#endif
+	#endif	/* _WIN32 */
 
-#ifdef __OPENGL__		// alias common functions
+	#ifdef __OPENGL__		// alias common functions
 
-	#include <GL/glew.h>
-	#include <GLFW/glfw3.h>
-	#include <glm/glm.hpp>
+		#include <GL/glew.h>
+		#include <GLFW/glfw3.h>
+		#include <glm/glm.hpp>
 
-	#include <assimp/Importer.hpp>
+		#include <assimp/Importer.hpp>
+		#include <assimp/scene.h>
+		#include <assimp/postprocess.h>
+
+		using vector2 = glm::vec2;
+		using vector3 = glm::vec3;
+		using vector4 = glm::vec4;
+
+	#endif /* __OPENGL__ */
+
+	/*----- AssImp -----*/
+	#include <assimp/Importer.hpp> 
 	#include <assimp/scene.h>
 	#include <assimp/postprocess.h>
 
-	using vector2 = glm::vec2;
-	using vector3 = glm::vec3;
-	using vector4 = glm::vec4;
+	/*------ STB -------*/
+	#include <stb_image.h>
 
-#endif /* __OPENGL__ */
-
-#include "integrate_types.hpp"
+	/*------ etc. ------*/
+	#include "integrate_types.hpp"
 
 #endif /* COMMON_H */

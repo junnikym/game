@@ -28,16 +28,19 @@ bool System::initialize() {
 	bool result = true;
 	
 	// -- m_graphics init 	----------------------------------------------
-	m_graphics = new GRAPHICS;
+
+	m_graphics = new Graphics;
 	if(m_graphics == nullptr) 
 		return false;
 
 	result = m_graphics->initialize( screen_width, screen_height, m_app_title );	
 	if( ! result ) 
 		return false;
+
 	// -------------------------------------------------------------------//
 
 	// -- input init 		----------------------------------------------
+
 #ifdef __OPENGL__
 	m_input = &g_input_msger;
 #else
@@ -45,6 +48,7 @@ bool System::initialize() {
 	if(m_input == nullptr) 
 		return false;
 #endif /* __OPENGL, else */
+
 	// -------------------------------------------------------------------//
 
 	return true;

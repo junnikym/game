@@ -1,42 +1,41 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "common.hpp"
+#include "mesh.hpp"
 
 namespace graphics {
 
-class Model {
-	private:
-		struct VERTEX_TYPE {
-			vector3 position;
-			vector4 color;
-			vector2 texture;
-		};
+/****************************************************************************
+ *	Model			| Class
+ * 
+ *  Process input through graphics lib
+ ****************************************************************************/
 
+class Model {
 	public:
 		Model();
+		Model( const char* path, int gamma );
 
-		bool initialize(DEVICE* device, string texture_path);
-		void shutdown();
-		void render();
+		void initialize( const char* path, int gamma );
 
-		int get_index_count();
+		void draw(Shader& s);
 
 	private:
+		void load_model(string const &path);
+		
+		void process_node(aiNode *node, const aiScene *scene);
+		Mesh process_mesh(aiMesh *mesh, const aiScene *scene);
 
-		bool initialize_buf(DEVICE* device);
-		void release_buf();
+		vector<Texture> load_material_textures( 
+			aiMaterial *mat, 
+			aiTextureType type, 
+			string typeName 
+		);
 
-		bool load_model( const char* file_path, 
-						 vector<vector3> & vertices,
-						 vector<vector3> & color, 
-						 vector<vector2> & uvs,
-						 vector<vector3> & normals );
-	
-	// Buffers
-		BUFFER *m_vertex_buf, *m_index_buf;
-
-		int m_vertex_count, m_index_count;
+		vector<Mesh> m_meshes;
+		string directory;
+		int gamma_correction;
+		vector<Texture> textures_loaded;
 };
 
 } // end of namespace : graphics

@@ -2,22 +2,49 @@
 
 namespace graphics { 
 
-Shader::Shader () {
-	
+void Shader::initialize() {
+	#if defined(__OPENGL__)
+
+		m_shader = 0;
+		m_vertex = 0;
+		m_fragment = 0;
+
+	#elif defined(__DX__)
+
+	#endif
+}
+
+void Shader::shutdown() {
+
 #if defined(__OPENGL__)
-	m_shader = 0;
-	m_vertex = 0;
-	m_fragment = 0;
+	glDetachShader(m_shader, m_vertex);
+	glDetachShader(m_shader, m_fragment);
+	
+	glDeleteShader(m_vertex);
+	glDeleteShader(m_fragment);
+
 #elif defined(__DX__)
 
 #endif
 
 }
 
+SHADER Shader::get() {
+	return this->m_shader;
+}
+
+void Shader::use() {
+
+#if defined(__OPENGL__) 
+	glUseProgram(m_shader); 
+#endif
+
+}
+
 bool Shader::load_shader( const char* vertex_file_path, const char* fragment_file_path ) {
 	// Create the shaders
-	m_vertex = glCreateShader(GL_VERTEX_Shader);
-	m_fragment = glCreateShader(GL_FRAGMENT_Shader);
+	m_vertex = glCreateShader(GL_VERTEX_SHADER);
+	m_fragment = glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Read the Vertex Shader code from the file
 	string vertex_code;
@@ -107,19 +134,5 @@ bool Shader::load_shader( const char* vertex_file_path, const char* fragment_fil
 	return true;
 }
 
-void Shader::shutdown() {
-
-#if defined(__OPENGL__)
-	glDetachShader(m_shader, m_vertex);
-	glDetachShader(m_shader, m_fragment);
-	
-	glDeleteShader(m_vertex);
-	glDeleteShader(m_fragment);
-
-#elif defined(__DX__)
-
-#endif
-
-}
 
 } // end of namespace : graphics

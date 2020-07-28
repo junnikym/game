@@ -14,20 +14,21 @@ Graphics::Graphics() { }
 
 bool Graphics::initialize( int& screen_width, int& screen_height, const string& app_title ) {
 
-// initialize glfw
+	// initialize glfw
+	//----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 	if ( !glfwInit() ) {
 		cout << "Failed to initialize GLFW" << endl;
 		return false;
 	}
 
-// setting
+	// setting
 	glfwWindowHint(GLFW_SAMPLES, 4); 								// 4x antialiasing
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); 					// preference version
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);					// minimum version
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); 			// do not use old content
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); 
 
-// if not setting screen size -> set to full size
+	// if not setting screen size -> set to full size
 	if( ( ! screen_width ) | ( ! screen_height ) ) {
 		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
@@ -35,7 +36,7 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 		screen_height = mode->height;
 	}
 
-// Create Window, OpenGL Content
+	// Create Window, OpenGL Content
 	this->window = glfwCreateWindow( screen_width, screen_height, app_title.c_str(), NULL, NULL);
 	if( this->window == NULL ){
 		cout << "Failed to open GLFW window." << endl;
@@ -44,21 +45,32 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 	}
 	glfwMakeContextCurrent(this->window);
 
-// initislize GLFW
+	// initislize GLFW
+	//----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 
 	glewExperimental = GL_TRUE; // Needed for core profile
 	if (glewInit() != GLEW_OK) {
 		cout << "Failed to initialize GLEW." << endl;
 		return false;
 	}
 
-// set callback functions
+	// set callback functions
 	glfwSetKeyCallback(this->window, key_callback);
 	glfwSetCursorPosCallback(this->window, mouse_cursor_callback);
 	glfwSetScrollCallback(this->window, mouse_scroll_callback);
 	glfwSetFramebufferSizeCallback(this->window, frame_buf_size_callback);
 
-// activate VSYNC
+	// activate VSYNC
 	glfwSwapInterval(1);
+
+	// STB
+	stbi_set_flip_vertically_on_load(true);
+
+
+// ----- ---------- ---------- ---------- ----- //
+// -- for testing	---------- ---------- ---- //
+
+// ----- ---------- ---------- ---------- ----- //
+// ----- ---------- ---------- ---------- ---- //
 
 	return true;
 }
