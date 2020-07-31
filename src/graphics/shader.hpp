@@ -14,10 +14,12 @@ namespace graphics {
 class Shader {
 	public:
 		Shader() = default;
+		Shader( const char* vertex_path, const char* fragment_path );
 
 		void initialize();
 		void shutdown();
 
+		bool load( const char* vertex_path, const char* fragment_path );
 		SHADER get();
 		void use();
 		
@@ -36,6 +38,7 @@ class Shader {
 		ID3D11Buffer* m_matrixBuffer;
 	#endif
 };
+
 
 } // end of namespace : graphics
 

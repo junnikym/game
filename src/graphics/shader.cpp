@@ -2,6 +2,13 @@
 
 namespace graphics { 
 
+Shader::Shader( const char* vertex_path, const char* fragment_path ) {
+	if ( ! this->load(vertex_path, fragment_path) ) {
+		cout << "fail to load shader" << endl;
+		this->initialize();
+	}
+}
+
 void Shader::initialize() {
 	#if defined(__OPENGL__)
 
@@ -27,6 +34,12 @@ void Shader::shutdown() {
 
 #endif
 
+}
+
+bool Shader::load( const char* vertex_path, const char* fragment_path ) {
+	this->shutdown();
+	this->initialize();
+	return this->load_shader(vertex_path, fragment_path);
 }
 
 SHADER Shader::get() {
