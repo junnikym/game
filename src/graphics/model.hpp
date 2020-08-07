@@ -14,7 +14,7 @@ namespace graphics {
 class Model {
 	public:
 		Model();
-		Model( const char* path, int gamma );
+		Model( const char* path, int gamma = 0 );
 
 		void initialize( const char* path, int gamma );
 
@@ -31,6 +31,10 @@ class Model {
 			aiTextureType type, 
 			string typeName 
 		);
+
+	/* ===== ===== ===== ===== =====
+	 *	Members 
+	===== ===== ===== ===== ===== */
 
 		vector<Mesh> m_meshes;
 		string directory;

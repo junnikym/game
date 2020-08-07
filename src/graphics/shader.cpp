@@ -82,13 +82,16 @@ bool Shader::load_shader( const char* vertex_file_path, const char* fragment_fil
 		fragment_code = sstr.str();
 		fragment_stream.close();
 	} else {
-		cout << "Fail to open shader : "<< vertex_file_path << endl;
+		cout << "Fail to open shader : "<< fragment_file_path << endl;
 		getchar();
 		return false;
 	}
 
 	GLint Result = GL_FALSE;
 	int InfoLogLength = 0;
+
+	// Compile and Check Vertex Shader
+	//-------------------------------------------------------
 
 	// Compile Vertex Shader
 	cout << "Compiling shader : " << vertex_file_path << endl;
@@ -102,11 +105,14 @@ bool Shader::load_shader( const char* vertex_file_path, const char* fragment_fil
 	if ( InfoLogLength > 0 ){
 		std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
 		glGetShaderInfoLog(m_vertex, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-		printf("%s\n", &VertexShaderErrorMessage[0]);
+		printf("fragment shader error : \n%s\n", &VertexShaderErrorMessage[0]);
 
 		this->shutdown();
 		return false;
 	}
+
+	// Compile and Check Fragment Shader
+	//-------------------------------------------------------
 
 	// Compile Fragment Shader
 	cout << "Compiling shader : " << fragment_file_path << endl;
@@ -120,15 +126,18 @@ bool Shader::load_shader( const char* vertex_file_path, const char* fragment_fil
 	if ( InfoLogLength > 0 ){
 		std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
 		glGetShaderInfoLog(m_fragment, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-		printf("%s\n", &FragmentShaderErrorMessage[0]);
+		printf("fragment shader error : \n%s\n", &FragmentShaderErrorMessage[0]);
 
 		this->shutdown();
 		return false;
 	}
 
+	// Link Shaders to Program
+	//-------------------------------------------------------
+
 	// Link the program
 	m_shader = glCreateProgram();
-	glAttachShader(m_shader, m_fragment);
+	glAttachShader(m_shader, m_vertex);
 	glAttachShader(m_shader, m_fragment);
 	glLinkProgram(m_shader);
 
@@ -138,7 +147,7 @@ bool Shader::load_shader( const char* vertex_file_path, const char* fragment_fil
 	if ( InfoLogLength > 0 ) {
 		std::vector<char> ProgramErrorMessage(InfoLogLength+1);
 		glGetProgramInfoLog(m_shader, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-		printf("%s\n", &ProgramErrorMessage[0]);
+		printf("Error when link shader to program : \n%s\n", &ProgramErrorMessage[0]);
 
 		this->shutdown();
 		return false;

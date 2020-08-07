@@ -65,9 +65,32 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 	// STB
 	stbi_set_flip_vertically_on_load(true);
 
+	// early depth testing
+	glEnable(GL_DEPTH_TEST);
 
 // ----- ---------- ---------- ---------- ----- //
 // -- for testing	---------- ---------- ---- //
+
+	// read and compile shader
+	Shader basic_shader(
+		"./resource/shader/vertex_shader.vs", 
+		"./resource/shader/fragment_shader.fs"
+	);
+
+	this->m_shader.insert( 
+		pair<string, Shader>(
+			"basic_shader",
+			basic_shader
+	));
+
+	// load models
+	Model loaded_model("resource/objects/basic_3d_objs/cube.obj");
+
+	this->m_model.insert(
+		pair<string, Model>(
+			"backpack",
+			loaded_model
+	));
 
 // ----- ---------- ---------- ---------- ----- //
 // ----- ---------- ---------- ---------- ---- //
@@ -78,6 +101,11 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 #endif /* __OPENGL__ , __DX__ */
 
 bool Graphics::shutdonw() {
+
+	for (auto it : this->m_shader) {
+		it.second.shutdown();
+	}
+
 	#ifdef __OPENGL__
 		glfwTerminate();
 	#endif /* __OPENGL__ */
@@ -98,6 +126,7 @@ void Graphics::clear_screen() {
 
 int Graphics::render() {
 	// -- render begin 	--------------------------------------------------
+	// -------------------------------------------------------------------//
 	#ifdef __OPENGL__	
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwPollEvents();
@@ -105,10 +134,17 @@ int Graphics::render() {
 	// -------------------------------------------------------------------//
 	
 	// -- render 		--------------------------------------------------
-		/*   ...   */
+	// -------------------------------------------------------------------//
+	m_shader.find("basic_shader")->second.use();
+	
+	m_model.find("backpack")->second.draw(
+		m_shader.find("basic_shader")->second
+	);
+
 	// -------------------------------------------------------------------//
 
 	// -- render begin 	--------------------------------------------------
+	// -------------------------------------------------------------------//
 	#ifdef __OPENGL__	
 		glfwSwapBuffers(this->window);
 		return glfwWindowShouldClose(this->window);

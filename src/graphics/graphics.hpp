@@ -27,6 +27,9 @@ class Graphics {
 	private:
 		float screen_color[4] = { 0.0f };
 
+		map<string, Shader> m_shader;
+		map<string, Model> m_model;
+
 	#ifdef __OPENGL__
 		GLFWwindow* window;
 	#endif /* __OPENGL__ */
