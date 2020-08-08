@@ -1,9 +1,9 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "common.hpp"
+#include "../common.hpp"
 
-namespace graphics { 
+namespace input { 
 
 class Input {
 	public:
@@ -22,6 +22,6 @@ class Input {
 		int m_keys[512];
 };
 
-} // end of namespace : graphics
+} // end of namespace : input
 
 #endif /* INPUT_H */

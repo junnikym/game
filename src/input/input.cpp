@@ -1,6 +1,6 @@
 #include "input.hpp"
 
-namespace graphics { 
+namespace input { 
 
 /****************************************************************************
  *	Input			Class
@@ -33,4 +33,4 @@ int Input::is_key_down( int key ) {
 
 // -------------------------------------------------------------------------------//
 
-} // end of namespace : graphics
+} // end of namespace : input
