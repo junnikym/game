@@ -1,7 +1,7 @@
-#ifndef SHADER_H
-#define SHADER_H
+#ifndef SHADER_HPP
+#define SHADER_HPP
 
-#include "common.hpp"
+#include "../common.hpp"
 
 namespace graphics { 
 
@@ -22,9 +22,13 @@ class Shader {
 		bool load( const char* vertex_path, const char* fragment_path );
 		SHADER get();
 		void use();
+
+		void set_mat4(const string& key, const matrix4& value) const;
 		
 	private:
 		bool load_shader( const char* vertex_path, const char* fragment_path );
+
+		bool check_error(const GLuint& shader, const string& type);
 
 		VERTEX_SHADER m_vertex;
 		FRAGMENT_SHADER m_fragment;

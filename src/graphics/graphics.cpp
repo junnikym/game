@@ -54,9 +54,9 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 	}
 
 	// set callback functions
-	glfwSetKeyCallback(this->window, key_callback);
-	glfwSetCursorPosCallback(this->window, mouse_cursor_callback);
-	glfwSetScrollCallback(this->window, mouse_scroll_callback);
+	glfwSetKeyCallback(this->window, input::key_callback);
+	glfwSetCursorPosCallback(this->window, input::mouse_cursor_callback);
+	glfwSetScrollCallback(this->window, input::mouse_scroll_callback);
 	glfwSetFramebufferSizeCallback(this->window, frame_buf_size_callback);
 
 	// activate VSYNC
@@ -68,30 +68,26 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 	// early depth testing
 	glEnable(GL_DEPTH_TEST);
 
+	this->screen_width = &screen_width;
+	this->screen_height = &screen_height;
+
 // ----- ---------- ---------- ---------- ----- //
 // -- for testing	---------- ---------- ---- //
-
-	// read and compile shader
-	Shader basic_shader(
-		"./resource/shader/vertex_shader.vs", 
-		"./resource/shader/fragment_shader.fs"
-	);
-
 	this->m_shader.insert( 
 		pair<string, Shader>(
-			"basic_shader",
-			basic_shader
-	));
-
-	// load models
-	Model loaded_model("resource/objects/basic_3d_objs/cube.obj");
+			"default",
+			Shader(
+				"resource/shader/default_vertex.vs", 
+				"resource/shader/default_fragment.fs"
+	)));
 
 	this->m_model.insert(
 		pair<string, Model>(
-			"backpack",
-			loaded_model
+			"cube",
+			Model("resource/object/backpack/backpack.obj")
 	));
 
+	m_cam.push_back(Camera(vector3(0, 0, 10)));
 // ----- ---------- ---------- ---------- ----- //
 // ----- ---------- ---------- ---------- ---- //
 
@@ -113,9 +109,9 @@ bool Graphics::shutdonw() {
 	return true;
 }
 
-void Graphics::set_screen_color( float r, float g, float b, float a) {
-	screen_color[0] = r;		screen_color[1] = g;
-	screen_color[2] = b;		screen_color[3] = a;
+void Graphics::set_screen_color( double r, double g, double b, double a) {
+	screen_color[0] = move(r);		screen_color[1] = move(g);
+	screen_color[2] = move(b);		screen_color[3] = move(a);
 }
 
 
@@ -125,33 +121,69 @@ void Graphics::clear_screen() {
 }
 
 int Graphics::render() {
-	// -- render begin 	--------------------------------------------------
+
+	// -- render begin
 	// -------------------------------------------------------------------//
 	#ifdef __OPENGL__	
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glfwPollEvents();
+
+// ----- ---------- ---------- ---------- ----- //
+// -- for testing	---------- ---------- ---- //
+
+// @ TODO : delete
+
+	Shader& finded_shader = m_shader.find("default")->second;
+	finded_shader.use();
+
+	matrix4 projection = perspective<double>( radians(m_cam[0].get_zoom()), (double)(*screen_width) / (double)(*screen_height), 0.1f, 100.0f);
+	matrix4 view = m_cam[0].get_view();
+
+	finded_shader.set_mat4("projection", projection);
+	finded_shader.set_mat4("view", view);
+
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+	finded_shader.set_mat4("model", model);
+
+	m_model.find("cube")->second.draw( finded_shader );
+/*
+	m_shader.use();
+
+	matrix4 projection = perspective<double>( radians(m_cam.get_zoom()), (double)(*screen_width) / (double)(*screen_height), 0.1f, 100.0f);
+	matrix4 view = m_cam.get_view();
+
+	m_shader.set_mat4("projection", projection);
+	m_shader.set_mat4("view", view);
+
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	m_shader.set_mat4("model", model);
+
+	m_model.draw(m_shader);
+*/
+// ----- ---------- ---------- ---------- ----- //
+// ----- ---------- ---------- ---------- ---- //
+
+
+
 	#endif /* __OPENGL__ */
-	// -------------------------------------------------------------------//
 	
-	// -- render 		--------------------------------------------------
-	// -------------------------------------------------------------------//
-	m_shader.find("basic_shader")->second.use();
-	
-	m_model.find("backpack")->second.draw(
-		m_shader.find("basic_shader")->second
-	);
-
+	// -- render
 	// -------------------------------------------------------------------//
 
-	// -- render begin 	--------------------------------------------------
+	// -- render begin
 	// -------------------------------------------------------------------//
 	#ifdef __OPENGL__	
 		glfwSwapBuffers(this->window);
+		glfwPollEvents();
+
 		return glfwWindowShouldClose(this->window);
 	#endif /* __OPENGL__ */
-	// -------------------------------------------------------------------//
 
-	return 1;	// do not close window
+	return 1;	// maintain a loop 
 }
 
 } // end of namespace : graphics

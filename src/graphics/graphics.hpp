@@ -1,8 +1,14 @@
 #ifndef GRAPHICS_HPP
 #define GRAPHICS_HPP
 
+#include "../common.hpp"
+
+#include "camera.hpp"
 #include "model.hpp"
 #include "callback.hpp"
+
+#include "../input/callback.hpp"
+#include "../input/control.hpp"
 
 namespace graphics {
 
@@ -20,15 +26,19 @@ class Graphics {
 		bool shutdonw();
 
 		void clear_screen();
-		void set_screen_color( float r, float g, float b, float a );
+		void set_screen_color( double r, double g, double b, double a );
 
 		int render();
 
 	private:
-		float screen_color[4] = { 0.0f };
+		double screen_color[4] = { 0.0f };
 
-		map<string, Shader> m_shader;
-		map<string, Model> m_model;
+		const int* screen_width;
+		const int* screen_height;
+
+		std::map<string, Shader> 	m_shader;
+		std::map<string, Model> 	m_model;
+		std::vector<Camera>			m_cam;
 
 	#ifdef __OPENGL__
 		GLFWwindow* window;

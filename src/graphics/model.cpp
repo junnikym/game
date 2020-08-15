@@ -9,7 +9,7 @@ namespace graphics {
  ****************************************************************************/
 
 Model::Model() {
-	directory = "";
+	m_directory = "";
 	gamma_correction = 0;
 }
 
@@ -28,7 +28,7 @@ void Model::draw(Shader& s) {
 		elem.draw(s);
 }
 
-void Model::load_model(string const &path) {
+void Model::load_model(const string& path) {
 	Assimp::Importer importer;
 
 	const aiScene* scene = importer.ReadFile( 
@@ -43,7 +43,7 @@ void Model::load_model(string const &path) {
 		return;
 	}
 	// retrieve the directory path of the filepath
-	directory = path.substr(0, path.find_last_of('/'));
+	m_directory = path.substr(0, path.find_last_of('/'));
 
 	// process ASSIMP's root node recursively
 	process_node(scene->mRootNode, scene);
@@ -69,6 +69,7 @@ Mesh Model::process_mesh(aiMesh *mesh, const aiScene *scene) {
 
 	VERTEX_TYPE vertex;
 	vector3 vec;
+
 	vector2 texture_vec;
 
 	for(unsigned int i = 0; i < mesh->mNumVertices; i++) {
@@ -100,7 +101,7 @@ Mesh Model::process_mesh(aiMesh *mesh, const aiScene *scene) {
 		vec.y = mesh->mTangents[i].y;
 		vec.z = mesh->mTangents[i].z;
 		vertex.tangent = vec;
-		
+
 		// bitangent
 		vec.x = mesh->mBitangents[i].x;
 		vec.y = mesh->mBitangents[i].y;
@@ -109,7 +110,6 @@ Mesh Model::process_mesh(aiMesh *mesh, const aiScene *scene) {
 
 		vertices.push_back(vertex);
 	}
-	
 
 	for(unsigned int i = 0; i < mesh->mNumFaces; i++) {
 		aiFace face = mesh->mFaces[i];
@@ -117,7 +117,6 @@ Mesh Model::process_mesh(aiMesh *mesh, const aiScene *scene) {
 		for(unsigned int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
 	}
-
 
 	// process materials
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -161,12 +160,12 @@ vector<Texture> Model::load_material_textures(
 		material->GetTexture(type, i, &str);
 		skip = false;
 
-		for(unsigned int j = 0; j < textures_loaded.size(); j++) {
+		for(unsigned int j = 0; j < m_texture.size(); j++) {
 
-			comp = std::strcmp(textures_loaded[j].path().data(), str.C_Str());
+			comp = std::strcmp(m_texture[j].filename().data(), str.C_Str());
 
 			if(comp == 0) {
-				textures.push_back(textures_loaded[j]);
+				textures.push_back(m_texture[j]);
 				skip = true;
 				break;
 			}
@@ -175,12 +174,12 @@ vector<Texture> Model::load_material_textures(
 
 		if(!skip) {
 			Texture temp;
-			
-			temp.load(str.C_Str());
-			temp.set_type(type_name.c_str());
+
+			temp.load(m_directory, str.C_Str());
+			temp.set_type(type_name);
 
 			textures.push_back(temp);
-			textures_loaded.push_back(temp);
+			m_texture.push_back(temp);
 		}
 
 	}

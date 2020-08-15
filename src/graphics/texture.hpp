@@ -3,7 +3,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "common.hpp"
+#include "../common.hpp"
 
 namespace graphics {
 
@@ -16,21 +16,24 @@ namespace graphics {
 class Texture {
 	public:
 		Texture();
-		Texture(DEVICE* device, const char* path);
+		Texture(DEVICE* device, const string& path);
 
-		bool initialize(const char* path);
+		bool initialize(const string& path);
 		void shutdown();
 
 		TEXTURE get();
 		string type();
 		string path();
+		string filename();
+		string directory();
 
-		bool load(const char* path, bool gamma = false);
-		void set_type(const char* type);
+		bool load(const string& directory, const string& filename, bool gamma = false);
+		void set_type(const string& type);
 	private:
 		TEXTURE m_texture;
 		string m_type;
-		string m_path;
+		string m_filename;
+		string m_directory;
 };
 
 

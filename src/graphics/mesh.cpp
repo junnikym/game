@@ -8,11 +8,6 @@ namespace graphics {
  *  Manage vertices
  ****************************************************************************/
 
-Mesh::Mesh() {
-	m_vertex_buf = nullptr;
-	m_index_buf = nullptr;
-}
-
 Mesh::Mesh( 
 		DEVICE* device, 
 		const vector<VERTEX_TYPE>& vertices, 
@@ -40,9 +35,14 @@ void Mesh::release() {
 }
 
 void Mesh::draw(Shader &shader) {
+	/*
+	std::cout << "vertices : " << this->m_vertices.size() << endl;
+	std::cout << "indices : " << this->m_indices.size() << endl;
+	std::cout << "textures : " << this->m_textures.size() << endl;
+	std::cout << std::endl;
+	*/
 	string name = "";
 	string number = "";
-
 
 	// bind appropriate textures
 	unsigned int diffuse_i	= 1;
@@ -60,7 +60,7 @@ void Mesh::draw(Shader &shader) {
 			number = std::to_string(diffuse_i++);
 
 		else if(name == "texture_specular")
-			number = std::to_string(normal_i++);
+			number = std::to_string(specular_i++);
 
 		else if(name == "texture_normal")
 			number = std::to_string(normal_i++);
@@ -69,14 +69,16 @@ void Mesh::draw(Shader &shader) {
 			number = std::to_string(height_i++);
 
 		glUniform1i(
-			glGetUniformLocation(shader.get(), (name + number).c_str()), i);
+			glGetUniformLocation(shader.get(), (name + number).c_str()),
+			i
+		);
 
 		// and finally bind the texture
 		glBindTexture( GL_TEXTURE_2D, m_textures[i].get() );
 	}
 
 	// Draw mesh
-	glBindVertexArray( *m_VAO );
+	glBindVertexArray( m_VAO );
 	glDrawElements( GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0 );
 	glBindVertexArray( 0 );
 
@@ -90,37 +92,23 @@ void Mesh::setup_mesh_buf(DEVICE* device) {
 
 #if defined(__OPENGL__)
 
-	m_VAO = new GLuint;
-
-	m_vertex_buf = new BUFFER;
-	m_index_buf = new BUFFER;
-
-#elif defined(__DX__)
-
-	//D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	//D3D11_SUBRESOURCE_DATA vertexData, indexData;
-
-#endif
-
-#if defined(__OPENGL__)
-
 	// Generate Buffers
-	glGenVertexArrays ( 1, m_VAO );
-	glGenBuffers ( 1, m_vertex_buf );
-	glGenBuffers ( 1, m_index_buf );
+	glGenVertexArrays ( 1, &m_VAO );
+	glGenBuffers ( 1, &m_vertex_buf );
+	glGenBuffers ( 1, &m_index_buf );
 
 	// Vertex Array Object
-	glBindVertexArray ( *m_VAO );
+	glBindVertexArray ( m_VAO );
 
 	// Vertex Buffer Object
-	glBindBuffer ( GL_ARRAY_BUFFER, *m_vertex_buf );
+	glBindBuffer ( GL_ARRAY_BUFFER, m_vertex_buf );
 	glBufferData ( GL_ARRAY_BUFFER, 
 				   m_vertices.size() * sizeof(VERTEX_TYPE), 
 				   &m_vertices[0], 
 				   GL_STATIC_DRAW );
 
 	// Index Buffer Object
-	glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER, *m_index_buf );
+	glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER, m_index_buf );
 	glBufferData ( GL_ELEMENT_ARRAY_BUFFER, 
 				   m_indices.size() * sizeof(unsigned int), 
 				   &m_indices[0], 
@@ -130,7 +118,7 @@ void Mesh::setup_mesh_buf(DEVICE* device) {
 
 	// Vertex Position
 	glEnableVertexAttribArray ( 0 );
-	glVertexAttribPointer ( 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( VERTEX_TYPE ), (void*)0 );
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VERTEX_TYPE), (void*)0);
 	// Vertex Normals
 	glEnableVertexAttribArray(1);	
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VERTEX_TYPE), (void*)offsetof(VERTEX_TYPE, normal));
@@ -155,34 +143,18 @@ void Mesh::setup_mesh_buf(DEVICE* device) {
 void Mesh::release_mesh_buf() {
 
 	#if defined(__OPENGL__)
-		glDeleteVertexArrays( 1, m_VAO);
-	#endif
+		glDeleteVertexArrays( 1, &m_VAO);
+		glDeleteBuffers( 1, &m_index_buf);
+		glDeleteBuffers( 1, &m_vertex_buf);
 
-	// Release the index buffer. 
-	if( m_index_buf != nullptr ) { 
-	
-		#if defined(__OPENGL__)
-			glDeleteBuffers( 1, m_index_buf);
-			delete m_index_buf;
-		#elif defined(__DX__)
-			m_index_buf->Release(); 
-		#endif
-		
+	#elif defined(__DX__)
+		m_index_buf->Release(); 
+		m_vertex_buf->Release(); 
+
 		m_index_buf = nullptr; 
-	}
-
-	// Release the vertex buffer. 
-	if( m_vertex_buf != nullptr ) { 
-		
-		#if defined(__OPENGL__)
-			glDeleteBuffers( 1, m_vertex_buf);
-			delete m_vertex_buf;
-		#elif defined(__DX__)
-			m_vertex_buf->Release(); 
-		#endif
-
 		m_vertex_buf = nullptr;
-	}
+
+	#endif
 
 }
 

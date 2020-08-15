@@ -1,5 +1,5 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef MODEL_HPP
+#define MODEL_HPP
 
 #include "mesh.hpp"
 
@@ -21,7 +21,7 @@ class Model {
 		void draw(Shader& s);
 
 	private:
-		void load_model(string const &path);
+		void load_model(const string& path);
 		
 		void process_node(aiNode *node, const aiScene *scene);
 		Mesh process_mesh(aiMesh *mesh, const aiScene *scene);
@@ -37,11 +37,11 @@ class Model {
 	===== ===== ===== ===== ===== */
 
 		vector<Mesh> m_meshes;
-		string directory;
+		vector<Texture> m_texture;
+		string m_directory;
 		int gamma_correction;
-		vector<Texture> textures_loaded;
 };
 
 } // end of namespace : graphics
 
-#endif
+#endif /* ! MODEL_HPP */

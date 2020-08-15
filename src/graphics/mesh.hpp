@@ -1,7 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "common.hpp"
+#include "../common.hpp"
 
 #include "shader.hpp"
 #include "texture.hpp"
@@ -16,7 +16,6 @@ namespace graphics {
 
 class Mesh {
 	public:
-		Mesh();
 		Mesh( 
 			DEVICE* device, 
 			const vector<VERTEX_TYPE>& vertices, 
@@ -44,11 +43,12 @@ class Mesh {
 		vector<unsigned int> m_indices;
 		vector<Texture>	m_textures;
 
-		// Buffers
-		BUFFER *m_vertex_buf, *m_index_buf;
-
 	#if defined(__OPENGL__) 
-		GLuint *m_VAO;
+		// Buffers
+		BUFFER m_vertex_buf = 0;
+		BUFFER m_index_buf = 0;
+
+		BUFFER m_VAO = 0;
 	#endif
 };
 

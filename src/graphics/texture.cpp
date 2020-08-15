@@ -12,7 +12,7 @@ Texture::Texture() {
 	
 }
 
-Texture::Texture(DEVICE* device, const char* path) {
+Texture::Texture(DEVICE* device, const string& path) {
 
 }
 
@@ -25,19 +25,30 @@ string Texture::type() {
 }
 
 string Texture::path() {
-	return this->m_path;
+	return (m_directory + "/" + m_filename);
 }
 
-bool Texture::load(const char* path, bool gamma) {
-	string filename = string(path);
+string Texture::filename() {
+	return m_filename;
+}
+
+string Texture::directory() {
+	return m_directory;
+}
+
+bool Texture::load(const string& directory, const string& filename, bool gamma) {
+	this->m_directory = directory;
+	this->m_filename = filename;
+
+	string path = this->path();
 
 	glGenTextures(1, &m_texture);
 
 	int width, height, nrComponents;
-	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-	if (data)
-	{
+	unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrComponents, 0);
+	if (data) {
 		GLenum format;
+		
 		if (nrComponents == 1)
 			format = GL_RED;
 		else if (nrComponents == 3)
@@ -66,7 +77,7 @@ bool Texture::load(const char* path, bool gamma) {
 	return true;
 }
 
-void Texture::set_type(const char* type) {
+void Texture::set_type(const string& type) {
 	this->m_type = type;
 }
 
