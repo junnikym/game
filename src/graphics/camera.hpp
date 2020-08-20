@@ -73,6 +73,8 @@ class Camera {
 		double zoom;
 };
 
+static std::vector<Camera> g_cams;
+
 } // end of namespace : graphics
 
 #endif /* ! CAMERA_HPP */

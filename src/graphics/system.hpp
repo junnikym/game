@@ -3,6 +3,8 @@
 
 #include "graphics.hpp"
 
+using namespace input;
+
 namespace graphics { 
 
 #ifdef __OPENGL__

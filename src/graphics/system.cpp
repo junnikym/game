@@ -27,7 +27,8 @@ System::System ( string title, int width, int height ) {
 bool System::initialize() {
 	bool result = true;
 	
-	// -- m_graphics init 	----------------------------------------------
+	// m_graphics init
+	//--------------------------------------------------
 
 	m_graphics = new Graphics;
 	if(m_graphics == nullptr) 
@@ -37,19 +38,17 @@ bool System::initialize() {
 	if( ! result ) 
 		return false;
 
-	// -------------------------------------------------------------------//
+	// input init
+	//--------------------------------------------------
+	#ifdef __OPENGL__
+		m_input = &g_input_msger;
+	#else
+		m_input = new Input;
+		if(m_input == nullptr) 
+			return false;
+	#endif /* __OPENGL, else */
 
-	// -- input init 		----------------------------------------------
-
-#ifdef __OPENGL__
-	m_input = &g_input_msger;
-#else
-	m_input = new Input;
-	if(m_input == nullptr) 
-		return false;
-#endif /* __OPENGL, else */
-
-	// -------------------------------------------------------------------//
+	m_graphics->set_screen_color(0.1, 0.1, 0.1, 1.0);
 
 	return true;
 }
@@ -84,8 +83,8 @@ void System::run() {
 
 		m_graphics->clear_screen();
 
-		glEnable(GL_DEPTH_TEST);	// 화면의 깊이값을 측정하여 프레그먼트를 사용할지
-		glDepthFunc(GL_LESS);		// 폐기할지 지정한다.
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 
 		glEnable ( GL_BLEND );
 		glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
