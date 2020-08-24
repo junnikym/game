@@ -7,6 +7,13 @@
 
 namespace math {
 
+template <class T>
+Vector<T>::Vector(const Vector<T>& other) {
+	this->m_size = other.m_size;
+
+	this->memory.resize(m_size);
+	this->memory.assign(other.memory.begin(), other.memory.end());
+}
 
 /* ==================================================
  * Get functions
@@ -21,6 +28,10 @@ template <class T>
 T Vector<T>::get(const unsigned int& index) const {
 	return this->memory[index];
 }
+
+/* ==================================================
+ * Set functions
+ ================================================== */
 
 /* ==================================================
  * Compound Assignment

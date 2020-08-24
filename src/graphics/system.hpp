@@ -33,6 +33,15 @@ class System {
 
 		Graphics* m_graphics;
 		Input* m_input;
+
+		// ---  for test --- 
+		FourDirectionControl control_key = FourDirectionControl(
+			GLFW_KEY_UP,
+			GLFW_KEY_DOWN,
+			GLFW_KEY_LEFT,
+			GLFW_KEY_RIGHT,
+			*m_input
+		);
 };
 
 } // end of namespace : graphics

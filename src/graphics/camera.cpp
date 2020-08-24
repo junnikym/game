@@ -86,9 +86,26 @@ void Camera::append_offset_pos(
 	update();
 }
 
+void Camera::connect_entity(const Entity* ent_ptr) {
+	m_entity = ent_ptr;
+}
+
 matrix4 Camera::get_view() {
 	#if defined(__OPENGL__)
-		return glm::lookAt(position, position + front, up);
+		
+		if(m_entity == nullptr) {
+			return glm::lookAt(position, position + front, up);
+		}
+
+		math::Vector<double> test = m_entity->position();
+
+		vector3 pos = math_vec_to_glm_vec3<double>(
+			m_entity->position()
+		);
+		pos += position;
+
+		return glm::lookAt(pos, pos + front, up);
+
 	#elif defined(__DX__)
 		// @ TODO : Implement
 	#endif

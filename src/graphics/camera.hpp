@@ -3,6 +3,8 @@
 
 #include "../common.hpp"
 
+#include "../physics/entity.hpp"
+
 /* --------------------------------------------------
  * Default Cammera Setting Value
  -------------------------------------------------- */
@@ -32,6 +34,7 @@ class Camera {
 		);
 
 		void set_asix(double yaw, double pitch, double roll);
+		void connect_entity(const Entity* ent_ptr);
 		void append_offset_axis(
 			const double& yaw,
 			const double& pitch, 
@@ -71,6 +74,8 @@ class Camera {
 		vector3 up;
 		
 		double zoom;
+
+		const Entity* m_entity = nullptr;
 };
 
 static std::vector<Camera> g_cams;

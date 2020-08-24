@@ -9,7 +9,9 @@ namespace math {
 template<class T>
 class Vector {
 	public:
+		Vector() = default;
 		Vector(size_t_r size);
+		Vector(const Vector<T>& other);
 
 		size_t size() const;
 

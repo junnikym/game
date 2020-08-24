@@ -5,10 +5,6 @@
 
 using namespace std;
 
-#ifdef __OPENGL__
-	graphics::Input g_input_msger;
-#endif /* __OPENGL__ */
-
 int main() {
 	bool result = false;
 	graphics::System system( "title", 800, 600);

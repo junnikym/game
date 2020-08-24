@@ -8,7 +8,9 @@
 #include "callback.hpp"
 
 #include "../input/callback.hpp"
-//#include "../input/control.hpp"
+#include "../input/control.hpp"
+
+#include "../physics/entity.hpp"
 
 namespace graphics {
 
@@ -35,11 +37,9 @@ class Graphics {
 
 		const int* screen_width;
 		const int* screen_height;
-/*
-		std::map<string, Shader> 	m_shader;
-		std::map<string, Model> 	m_model;
-		std::vector<Camera>			m_cam;
-*/
+
+		std::vector<Entity> m_entitys;
+
 	#ifdef __OPENGL__
 		GLFWwindow* window;
 	#endif /* __OPENGL__ */
