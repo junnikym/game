@@ -3,10 +3,38 @@
 
 #include "input.hpp"
 
+#include "../common.hpp"
+
 namespace input { 
 
+Class BinaryControl;
+
 class Control {
-	
+	public:
+	private:
+};
+
+class FourDirectionControl {
+	public:
+		FourDirectionControl(
+			const usigned int& up_key,
+			const usigned int& down_key,
+			const usigned int& left_key,
+			const usigned int& right_key,
+			const Input&	   input_ptr
+		);
+
+		int show_key() const;
+
+		void update();
+		const int[4]& get();
+	private:
+		const Input* m_input_ptr = nullptr;
+
+		BinaryControl m_vertical;
+		BinaryControl m_horizontal;
+
+		int[4] m_buffer = {0};
 };
 
 class BinaryControl {
@@ -29,7 +57,7 @@ class BinaryControl {
 		int get();
 
 	private:
-		const Input* m_input_ptr = nullptr
+		const Input* m_input_ptr = nullptr;
 
 		int m_positive_key = -1;
 		int m_negative_key = -1;
