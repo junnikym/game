@@ -7,34 +7,45 @@
 
 namespace input { 
 
-Class BinaryControl;
+class BinaryControl;
 
 class Control {
 	public:
-	private:
+		virtual ~Control() { }
+		
+		virtual void update() { }
+		virtual void get(int reciver[]) { }
 };
 
-class FourDirectionControl {
+class FourDirectionControl : public Control {
 	public:
 		FourDirectionControl(
-			const usigned int& up_key,
-			const usigned int& down_key,
-			const usigned int& left_key,
-			const usigned int& right_key,
-			const Input&	   input_ptr
+			const unsigned int& up_key,
+			const unsigned int& down_key,
+			const unsigned int& left_key,
+			const unsigned int& right_key,
+			const Input*		input_ptr
 		);
+
+		~FourDirectionControl();
+
+		void release();
 
 		int show_key() const;
 
+		/**
+		 *  inheritance from Control class
+		 */
 		void update();
-		const int[4]& get();
+		void get(int reciver[]);
+		 
 	private:
 		const Input* m_input_ptr = nullptr;
 
-		BinaryControl m_vertical;
-		BinaryControl m_horizontal;
+		BinaryControl* m_vertical = nullptr;
+		BinaryControl* m_horizontal = nullptr;
 
-		int[4] m_buffer = {0};
+		int m_buffer[4] = {0};
 };
 
 class BinaryControl {
@@ -42,7 +53,7 @@ class BinaryControl {
 		BinaryControl(
 			const unsigned int& positive_key,
 			const unsigned int& negative_key,
-			const Input&		input_ptr
+			const Input*		input_ptr
 		);
 
 		void positive_key(const unsigned int& positive_key);

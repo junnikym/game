@@ -12,6 +12,7 @@ class Vector {
 		Vector() = default;
 		Vector(size_t_r size);
 		Vector(const Vector<T>& other);
+		Vector(std::initializer_list<T> il);
 
 		size_t size() const;
 

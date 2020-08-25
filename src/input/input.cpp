@@ -27,7 +27,7 @@ void Input::key_up( int& key ) {
 // -------------------------------------------------------------------------------//
 // ---------- Input's getter 	--------------------------------------------------
 
-int Input::is_key_down( int key ) {
+int Input::is_key_down( int key ) const {
 	return m_keys[key];
 }
 

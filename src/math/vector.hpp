@@ -15,6 +15,11 @@ Vector<T>::Vector(const Vector<T>& other) {
 	this->memory.assign(other.memory.begin(), other.memory.end());
 }
 
+template <class T>
+Vector<T>::Vector(std::initializer_list<T> il) : memory(il) {
+	m_size = il.size();
+}
+
 /* ==================================================
  * Get functions
  ================================================== */

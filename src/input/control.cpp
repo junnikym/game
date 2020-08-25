@@ -2,21 +2,40 @@
 
 namespace input { 
 
+/****************************************************************************
+ *	FourDirectionControl	| Class
+ * 
+ *  Forward (Up), BackWard (Down), Left, Right Four Direction
+ * Binary Control Module
+ ****************************************************************************/
 
 FourDirectionControl::FourDirectionControl(
-	const usigned int& up_key,
-	const usigned int& down_key,
-	const usigned int& left_key,
-	const usigned int& right_key,
-	const Input&	   input_ptr
+	const unsigned int& up_key,
+	const unsigned int& down_key,
+	const unsigned int& left_key,
+	const unsigned int& right_key,
+	const Input*	   input_ptr
 ) {
-	m_vertical.positive_key(up_key);
-	m_vertical.negative_key(down_key);
-
-	m_horizontal.positive_key(right_key);
-	m_horizontal.negative_key(left_key);
-
 	this->m_input_ptr = input_ptr;
+
+	m_vertical = new BinaryControl(up_key, down_key, input_ptr);
+	m_vertical = new BinaryControl(right_key, left_key, input_ptr);
+}
+
+FourDirectionControl::~FourDirectionControl() {
+	this->release();
+}
+
+void FourDirectionControl::release() {
+	if(m_vertical != nullptr) {
+		delete m_vertical;
+		m_vertical = nullptr;
+	}
+
+	if(m_horizontal != nullptr) {
+		delete m_horizontal;
+		m_horizontal = nullptr;
+	}
 }
 
 void FourDirectionControl::update() {
@@ -24,29 +43,35 @@ void FourDirectionControl::update() {
 
 	int each_buf = 0;
 
-	each_buf = m_vertical.update();
+	each_buf = m_vertical->update();
 
 	if(each_buf > 0)
-		m_buffer[MOVEMENT::forward] = 1;
+		m_buffer[(int)MOVEMENT::forward] = 1;
 	else if(each_buf < 0) 
-		m_buffer[MOVEMENT::backward] = 1;
+		m_buffer[(int)MOVEMENT::backward] = 1;
 
-	each_buf = m_horizontal.update();
+	each_buf = m_horizontal->update();
 
 	if(each_buf > 0)
-		m_buffer[MOVEMENT::right] = 1;
+		m_buffer[(int)MOVEMENT::right] = 1;
 	else if(each_buf < 0) 
-		m_buffer[MOVEMENT::left] = 1;
+		m_buffer[(int)MOVEMENT::left] = 1;
 }
 
-const int[4]& FourDirectionControl::get() {
-	return this->m_buffer;
+void FourDirectionControl::get(int reciver[]) {
+	memcpy(reciver, m_buffer, 4 * sizeof(int));
 }
+
+/****************************************************************************
+ *	BinaryControl			| Class
+ * 
+ *  
+ ****************************************************************************/
 
 BinaryControl::BinaryControl(
 	const unsigned int& positive_key,
 	const unsigned int& negative_key,
-	const Input&		input_ptr
+	const Input*		input_ptr
 ) {
 	this->m_positive_key = (int)positive_key;
 	this->m_negative_key = (int)negative_key;
@@ -66,7 +91,7 @@ int BinaryControl::positive_key() const {
 }
 
 int BinaryControl::negative_key() const {
-	return m_negative_key
+	return m_negative_key;
 }
 
 void BinaryControl::input(const Input* input) {

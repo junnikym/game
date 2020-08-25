@@ -5,9 +5,15 @@
 //--------------------------------------------------
 #if defined(__OPENGL__)
 	#include <glm/glm.hpp>
+	#include <GLFW/glfw3.h>
 #elif defined(__DX__)
 
 #endif
+
+#include "math/vector.hpp"
+
+template<typename T>
+using DictVector = std::vector<std::pair<std::string, T>>;
 
 /*
  *	DEVICE :
@@ -36,6 +42,9 @@
  * 		- OpenGL	: GLuint
  * 		- DirectX	: ID3D11Device
  * 
+ * 	TIMER :
+ * 		- OpenGL	: glfwGetTime();
+ * 		- DirectX	: 
  */
 
 #if defined(__OPENGL__)
@@ -56,6 +65,8 @@
 
 	// < matrix >
 	using matrix4 = glm::mat4;
+
+	constexpr auto get_time = glfwGetTime;
 
 #elif defined(__DX__)
 	using DEVICE = ID3D11Device;
@@ -85,6 +96,19 @@
  * functions
  -------------------------------------------------- */
 
+template <class T>
+vector3 math_vec_to_glm_vec3(const math::Vector<T>& vec) {
+	int copy_until = 3;
+	vector3 result;
+	
+	if ( vec.size() < 3 )
+		copy_until = vec.size();
+
+	result.x = vec.get(0);	result.y = vec.get(1);	result.z = vec.get(2);
+
+	return result;
+} 
+
 /* --------------------------------------------------
  * Structures
  -------------------------------------------------- */
@@ -99,11 +123,11 @@ struct VERTEX_TYPE {
 
 // Enumerator
 
-enum class MOVEMENT {
-	forward,
-	backward,
-	left,
-	right,
+enum class MOVEMENT : unsigned int{
+	forward  = 0,
+	backward = 1,
+	left 	 = 2,
+	right	 = 3,
 };
 
 enum class DIRECTION {

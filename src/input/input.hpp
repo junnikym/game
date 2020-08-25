@@ -16,7 +16,7 @@ class Input {
 		void key_up( int& key ); 
 		
 	// -- getter fuctions --
-		int is_key_down( int key );
+		int is_key_down( int key ) const;
 
 	private:
 		int m_keys[512];
