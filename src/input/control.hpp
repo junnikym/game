@@ -45,7 +45,7 @@ class FourDirectionControl : public Control {
 		BinaryControl* m_vertical = nullptr;
 		BinaryControl* m_horizontal = nullptr;
 
-		int m_buffer[4] = {0};
+		int m_buffer[2] = {0};
 };
 
 class BinaryControl {
@@ -80,6 +80,7 @@ class BinaryControl {
 		 * 		value == 0 : nothing activate
 		 */
 		int m_key_buf = 0;
+		int m_backup_buf = 0;
 };
 
 } // end of namespace : input
