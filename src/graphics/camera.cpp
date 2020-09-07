@@ -2,6 +2,8 @@
 
 namespace graphics {
 
+std::vector<Camera> g_cams;
+
 Camera::Camera() {
 	intialize();
 
@@ -33,6 +35,8 @@ Camera::Camera(
 }
 
 void Camera::intialize() {
+	cout << "cammera created : " << this << endl;
+
 	this->position 	= vector3(0.0f, 0.0f, 0.0f);
 	this->up 		= vector3(0.0f, 1.0f, 0.0f);
 	this->world_up =  this->up;
@@ -86,18 +90,15 @@ void Camera::append_offset_pos(
 	update();
 }
 
-void Camera::connect_entity(const Entity* ent_ptr) {
+void Camera::connect_entity(const phy::Entity* ent_ptr) {
 	m_entity = ent_ptr;
 }
 
 matrix4 Camera::get_view() {
 	#if defined(__OPENGL__)
 		
-		if(m_entity == nullptr) {
+		if(m_entity == nullptr) 
 			return glm::lookAt(position, position + front, up);
-		}
-
-		math::Vector<double> test = m_entity->position();
 
 		vector3 pos = math_vec_to_glm_vec3<double>(
 			m_entity->position()

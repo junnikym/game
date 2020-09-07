@@ -1,5 +1,7 @@
 #include "entity.hpp"
 
+namespace phy {
+
 Entity::Entity(const math::Vector<double>& position) {
 	m_position = math::Vector<double>(position);
 }
@@ -27,7 +29,7 @@ void Entity::angle(double angle){
 
 bool Entity::append_controller(
 			const char* contorller_title,
-			const input::Control* controller,
+			input::ControlPtr& controller,
 			bool overlap
 ) {
 	string title = string(contorller_title);
@@ -40,8 +42,8 @@ bool Entity::append_controller(
 		}
 	}
 
-	m_controller.push_back(
-		std::make_pair(title, controller)
+	m_controller.push_back( 
+		std::move( std::make_pair(title, controller) )
 	);
 	
 	return true;
@@ -82,3 +84,25 @@ void Entity::remove_controller (
 		}
 	}
 }
+
+void Entity::update() {
+	int control_reciver[2] = { 0, };
+
+	for (auto it = m_controller.begin(); it != m_controller.end(); it++) {
+		it->second->get(control_reciver);
+		
+		cout << "controller : " << control_reciver[0] << ", " << control_reciver[1] << endl;
+
+		/**
+		 * @ TODO : Delete under the code line
+		 * 			this code wrotten only for test
+		 */
+
+		m_position[0] -= control_reciver[0];
+		m_position[1] -= control_reciver[1];
+
+		// --------------- until here ---------------
+	}
+}
+
+} // end of namespace : phy

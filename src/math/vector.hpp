@@ -114,9 +114,8 @@ bool Vector<T>::operator != (const Vector &other) const {
 
 template <class T>
 T& Vector<T>::operator [] (const int& index) {
-	return &this->memory[index];
+	return memory[index];
 }
-
 
 }	// end of namespace (math)
 

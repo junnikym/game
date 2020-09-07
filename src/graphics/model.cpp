@@ -2,6 +2,8 @@
 
 namespace graphics {
 
+std::map<string, Model> g_models;
+
 /****************************************************************************
  *	Model			| Class
  * 

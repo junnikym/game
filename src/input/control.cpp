@@ -52,6 +52,7 @@ void FourDirectionControl::update() {
 
 		m_buffer[(int)MOVEMENT_2D_ASIX::horizontal] = each_buf;
 	}
+
 }
 
 void FourDirectionControl::get(int reciver[]) {
@@ -95,40 +96,36 @@ void BinaryControl::input(const Input* input) {
 }
 
 int BinaryControl::update() {
-	int pressed = 0;
+	int positive = m_input_ptr->is_key_down(m_positive_key);
+	int negative = m_input_ptr->is_key_down(m_negative_key);
+	int pressed = positive + negative;
 
-	// Positive key pressed
-	// -------------------------------------------------------
-	if(m_input_ptr->is_key_down(m_positive_key)) {
-		if(m_backup_buf == 0) {
-			if(m_key_buf == -1) {
-				m_backup_buf = -1;
+	if(pressed) {
+
+		// Both key pressed
+		// --------------------------------------------------
+		if( pressed == 2 ) {
+			if(m_backup_buf == 0) {
+				m_backup_buf = m_key_buf;
+				m_key_buf = -m_key_buf;
 			}
-			m_key_buf = 1;
 		}
-		pressed += 1;
-	}
 
-	// Negative key pressed
-	// -------------------------------------------------------
-	if(m_input_ptr->is_key_down(m_negative_key)) {
-		if(m_backup_buf == 0) {
-			if(m_key_buf == 1) {
-				m_backup_buf = 1;
-			}
-			m_key_buf = -1;
+		// Only one key pressed
+		// --------------------------------------------------
+		else {
+			pressed = positive - negative;
+			
+			m_key_buf = pressed;
+			m_backup_buf = 0;
 		}
-		pressed += 1;
 	}
-
-	if(pressed == 1) {
-		if(m_backup_buf != 0)
-			m_key_buf = m_backup_buf;
-
+	// Nothing pressed
+	// --------------------------------------------------
+	else {
+		m_key_buf = 0;
 		m_backup_buf = 0;
 	}
-	else if(pressed == 0)
-		m_key_buf = 0;
 
 	return m_key_buf;
 }

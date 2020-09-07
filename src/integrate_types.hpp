@@ -123,11 +123,16 @@ struct VERTEX_TYPE {
 
 // Enumerator
 
-enum class MOVEMENT : unsigned int{
+enum class MOVEMENT : unsigned int {
 	forward  = 0,
 	backward = 1,
 	left 	 = 2,
 	right	 = 3,
+};
+
+enum class MOVEMENT_2D_ASIX : unsigned int {
+	vertical = 1,
+	horizontal = 0,
 };
 
 enum class DIRECTION {

@@ -34,7 +34,7 @@ class Camera {
 		);
 
 		void set_asix(double yaw, double pitch, double roll);
-		void connect_entity(const Entity* ent_ptr);
+		void connect_entity(const phy::Entity* ent_ptr);
 		void append_offset_axis(
 			const double& yaw,
 			const double& pitch, 
@@ -75,10 +75,9 @@ class Camera {
 		
 		double zoom;
 
-		const Entity* m_entity = nullptr;
+		const phy::Entity* m_entity = nullptr;
 };
 
-static std::vector<Camera> g_cams;
 
 } // end of namespace : graphics
 

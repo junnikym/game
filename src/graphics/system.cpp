@@ -2,6 +2,8 @@
 
 namespace graphics {
 
+extern std::vector<Camera> g_cams;
+
 /****************************************************************************
  *	SYTEM			Class
  * 
@@ -50,6 +52,24 @@ bool System::initialize() {
 
 	m_graphics->set_screen_color(0.1, 0.1, 0.1, 1.0);
 
+	/**
+	 * @ TODO : Delete under the code line
+	 * 			this code wrotten only for test
+	 */
+	main_cam_controller = ControlPtr( new FourDirectionControl(
+		GLFW_KEY_UP,
+		GLFW_KEY_DOWN,
+		GLFW_KEY_LEFT,
+		GLFW_KEY_RIGHT,
+		m_input
+	));
+
+	main_cam.append_controller("FourDirection", main_cam_controller);
+
+	g_cams.push_back( Camera(vector3(0, 0, 40)) );
+
+	g_cams[0].connect_entity(&main_cam);
+
 	return true;
 }
 	
@@ -64,6 +84,15 @@ void System::shutdown() {
 
 		delete m_graphics;
 		m_graphics = nullptr;
+	}
+
+	/**
+	 * @ TODO : Delete under the code line
+	 * 			this code wrotten only for test
+	 */
+
+	if(main_cam_controller != nullptr) {
+		main_cam_controller.reset();
 	}
 }
 
@@ -80,7 +109,6 @@ void System::run() {
 	int exit = 0;
 
 	#ifdef __OPENGL__	
-
 		m_graphics->clear_screen();
 
 		glEnable(GL_DEPTH_TEST);
@@ -92,6 +120,15 @@ void System::run() {
 	#endif /* __OPENGL__ */
 	
 	do {
+		/**
+		 * @ TODO : Delete under the code line
+		 * 			this code wrotten only for test
+		 */
+		main_cam_controller->update();
+		main_cam.update();
+
+		// ==================== until here ====================
+
 		exit = m_graphics->render();
 
 	} 	while ( ! exit );

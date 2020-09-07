@@ -2,6 +2,10 @@
 
 namespace graphics {
 
+extern std::vector<Camera> g_cams;
+extern std::map<string, Model> g_models;
+extern std::map<string, Shader> g_shaders;
+
 /****************************************************************************
  *	Graphics		Class
  * 
@@ -86,8 +90,6 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 			"cube",
 			Model("resource/object/backpack/backpack.obj")
 	));
-
-	g_cams.push_back(Camera(vector3(0, 0, 10)));
 // ----- ---------- ---------- ---------- ----- //
 // ----- ---------- ---------- ---------- ---- //
 
@@ -134,8 +136,9 @@ int Graphics::render() {
 
 	Shader& finded_shader = g_shaders.find("default")->second;
 	finded_shader.use();
-
+ 
 	matrix4 projection = perspective<double>( radians(g_cams[0].get_zoom()), (double)(*screen_width) / (double)(*screen_height), 0.1f, 100.0f);
+
 	matrix4 view = g_cams[0].get_view();
 
 	finded_shader.set_mat4("projection", projection);

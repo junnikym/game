@@ -42,7 +42,6 @@ class Model {
 		int gamma_correction;
 };
 
-static std::map<string, Model> g_models;
 
 } // end of namespace : graphics
 

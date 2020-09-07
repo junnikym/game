@@ -4,6 +4,7 @@
 #include "graphics.hpp"
 
 using namespace input;
+using namespace phy;
 
 namespace graphics { 
 
@@ -31,17 +32,15 @@ class System {
 		int screen_width = 0;
 		int screen_height = 0;
 
-		Graphics* m_graphics;
-		Input* m_input;
+		Graphics* 	m_graphics;
+		Input* 		m_input;
 
-		// ---  for test --- 
-		FourDirectionControl control_key = FourDirectionControl(
-			GLFW_KEY_UP,
-			GLFW_KEY_DOWN,
-			GLFW_KEY_LEFT,
-			GLFW_KEY_RIGHT,
-			*m_input
-		);
+	/**
+	 * @ TODO : Delete under the code line
+	 * 			this code wrotten only for test
+	 */
+		ControlPtr main_cam_controller = nullptr;
+		Entity main_cam = Entity(math::Vector<double>{0, 0, 3});
 };
 
 } // end of namespace : graphics

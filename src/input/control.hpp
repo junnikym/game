@@ -7,7 +7,10 @@
 
 namespace input { 
 
+class Control;
 class BinaryControl;
+
+using ControlPtr = std::shared_ptr<Control>;
 
 class Control {
 	public:

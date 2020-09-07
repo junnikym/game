@@ -6,6 +6,8 @@
 #include "../math/vector.hpp"
 #include "../input/control.hpp"
 
+namespace phy {
+
 class Entity {
 	public:
 		Entity(const math::Vector<double>& position);
@@ -21,7 +23,7 @@ class Entity {
 
 		bool append_controller(
 			const char* contorller_title,
-			const input::Control* controller,
+			input::ControlPtr& controller,
 			bool overlap = false
 		);
 
@@ -35,6 +37,8 @@ class Entity {
 			const int& index
 		);
 
+		void update();
+
 	private:
 		string m_model;
 
@@ -42,7 +46,9 @@ class Entity {
 		math::Vector<double> m_position;
 		double m_angle;
 
-		DictVector<const input::Control*> m_controller;
+		DictVector<input::ControlPtr> m_controller;
 };
+
+} // end of namespace : phy
 
 #endif

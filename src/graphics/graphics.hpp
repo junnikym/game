@@ -14,6 +14,7 @@
 
 namespace graphics {
 
+
 class Graphics {
 	public:
 		Graphics();
@@ -37,8 +38,6 @@ class Graphics {
 
 		const int* screen_width;
 		const int* screen_height;
-
-		std::vector<Entity> m_entitys;
 
 	#ifdef __OPENGL__
 		GLFWwindow* window;

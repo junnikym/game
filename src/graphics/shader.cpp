@@ -2,6 +2,8 @@
 
 namespace graphics { 
 
+std::map<string, Shader> g_shaders;
+
 Shader::Shader( const char* vertex_path, const char* fragment_path ) {
 	if ( ! this->load(vertex_path, fragment_path) ) {
 		cout << "fail to load shader" << endl;

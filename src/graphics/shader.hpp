@@ -43,7 +43,6 @@ class Shader {
 	#endif
 };
 
-static std::map<string, Shader> g_shaders;
 
 } // end of namespace : graphics
 
