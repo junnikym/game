@@ -28,35 +28,34 @@ void Entity::angle(double angle){
 }
 
 bool Entity::append_controller(
-			const char* contorller_title,
+			input::ControlType contorller_title,
 			input::ControlPtr& controller,
 			bool overlap
 ) {
-	string title = string(contorller_title);
-
 	if(!overlap) {
 		for(auto it : m_controller) {
-			if(it.first == title) {
+			if(it.first == contorller_title) {
 					return false;
 			}
 		}
 	}
 
 	m_controller.push_back( 
-		std::move( std::make_pair(title, controller) )
+		std::move( std::make_pair(
+			std::move(contorller_title), 
+			controller
+		) )
 	);
 	
 	return true;
 }
 
 void Entity::remove_controller ( 
-	const char* contorller_title,
+	input::ControlType& contorller_title,
 	bool include_overlap
 ) {
-	string title = string(contorller_title);
-
 	for(auto it = m_controller.begin(); it != m_controller.end(); it++) {
-		if(it->first == title) {
+		if(it->first == contorller_title) {
 			m_controller.erase(it);
 
 			if(!include_overlap) {
@@ -67,14 +66,13 @@ void Entity::remove_controller (
 }
 
 void Entity::remove_controller (
-			const char* contorller_title,
+			input::ControlType& contorller_title,
 			const int& index
 ) {
 	int passed_index = 0;
-	string title = string(contorller_title);
 
 	for(auto it = m_controller.begin(); it != m_controller.end(); it++) {
-		if(it->first == title) {
+		if(it->first == contorller_title) {
 			
 			if(passed_index == index) 
 				m_controller.erase(it);
@@ -91,7 +89,7 @@ void Entity::update() {
 	for (auto it = m_controller.begin(); it != m_controller.end(); it++) {
 		it->second->get(control_reciver);
 		
-		cout << "controller : " << control_reciver[0] << ", " << control_reciver[1] << endl;
+	//	cout << "controller : " << control_reciver[0] << ", " << control_reciver[1] << endl;
 
 		/**
 		 * @ TODO : Delete under the code line
@@ -103,6 +101,10 @@ void Entity::update() {
 
 		// --------------- until here ---------------
 	}
+}
+
+void Entity::input_updater(DictControl& controller) {
+
 }
 
 } // end of namespace : phy

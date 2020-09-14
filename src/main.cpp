@@ -10,7 +10,8 @@ int main() {
 	graphics::System system( "title", 800, 600);
 
 #ifdef __OPENGL__
-	g_input_msger.initialize();
+	// @TODO : need to modify
+	g_input_msger.initialize(0, 0);
 #endif /* __OPENGL__ */
 
 	result = system.initialize();

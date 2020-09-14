@@ -20,6 +20,11 @@ Vector<T>::Vector(std::initializer_list<T> il) : memory(il) {
 	m_size = il.size();
 }
 
+template <class T>
+Vector<T>::Vector(const T arr[]) {
+	memory = std::vector(std::begin(arr), std::end(arr));
+}
+
 /* ==================================================
  * Get functions
  ================================================== */
@@ -34,9 +39,45 @@ T Vector<T>::get(const unsigned int& index) const {
 	return this->memory[index];
 }
 
+template <class T>
+void Vector<T>::to_arr(T reciver[]) {
+	for(int i = 0; i < m_size; i++) 
+		reciver[i] = memory.get[i];
+}
+
+template <class T>
+double Vector<T>::length() {
+	double result = 0.0;
+
+	for(auto it : memory)
+		result += it;
+	
+	return result /= this->size();
+}
+
+template <class T>
+void Vector<T>::normalize() {
+	double length = this->length();
+
+	for(auto it : memory)
+		it /= length;
+}
+
+template <class T>
+Vector<T> Vector<T>::get_normalize() {
+	Vector<T> result = *this;
+	return std::move(result.normalize());
+}
+
 /* ==================================================
  * Set functions
  ================================================== */
+
+template <class T>
+void Vector<T>::append( T elem ) {
+	this->memory.push_back( move(elem) );
+	m_size++;
+}
 
 /* ==================================================
  * Compound Assignment
@@ -44,22 +85,26 @@ T Vector<T>::get(const unsigned int& index) const {
 
 template <class T>
 Vector<T>& Vector<T>::operator += (const Vector& rhs) {
-
+	
 }
 
 template <class T>
 Vector<T>& Vector<T>::operator -= (const Vector& rhs) {
+	for(int i = 0; i < m_size; i++) {
+		memory[i] -= rhs.get(i);
+	}
 
+	return *this;
 }
 
 template <class T>
 Vector<T>& Vector<T>::operator *= (const Vector& rhs) {
-
+	
 }
 
 template <class T>
 Vector<T>& Vector<T>::operator /= (const Vector& rhs) {
-
+	
 }
 
 /* ==================================================

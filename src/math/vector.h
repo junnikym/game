@@ -13,12 +13,20 @@ class Vector {
 		Vector(size_t_r size);
 		Vector(const Vector<T>& other);
 		Vector(std::initializer_list<T> il);
+		Vector(const T arr[]);
 
 		size_t size() const;
 
 		T get(const unsigned int& index) const;
+		void to_arr(T reciver[]);
+
+		double length();
+
+		void normalize();
+		Vector<T> get_normalize();
 
 		void resize( size_t_r size );
+		void append( T elem );
 
 	// Compound Assignment
 		Vector<T>& operator += (const Vector& rhs);

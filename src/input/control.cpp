@@ -2,6 +2,14 @@
 
 namespace input { 
 
+Control::Control(const Input* input_ptr) {
+	m_input_ptr = input_ptr;
+}
+
+void Control::set_input(const Input* input_ptr) {
+	m_input_ptr = input_ptr;
+}
+
 /****************************************************************************
  *	FourDirectionControl	| Class
  * 
@@ -16,10 +24,10 @@ FourDirectionControl::FourDirectionControl(
 	const unsigned int& right_key,
 	const Input*	   input_ptr
 ) {
-	this->m_input_ptr = input_ptr;
+	m_input_ptr = input_ptr;
 
-	m_vertical = new BinaryControl(up_key, down_key, input_ptr);
-	m_horizontal = new BinaryControl(right_key, left_key, input_ptr);
+	m_vertical = new BinaryControl(up_key, down_key);
+	m_horizontal = new BinaryControl(right_key, left_key);
 }
 
 FourDirectionControl::~FourDirectionControl() {
@@ -44,11 +52,11 @@ void FourDirectionControl::update() {
 	int each_buf = 0;
 
 	if(m_horizontal != nullptr && m_vertical != nullptr) {
-		each_buf = m_vertical->update();
+		each_buf = m_vertical->update(m_input_ptr);
 
 		m_buffer[(int)MOVEMENT_2D_ASIX::vertical] = each_buf;
 
-		each_buf = m_horizontal->update();
+		each_buf = m_horizontal->update(m_input_ptr);
 
 		m_buffer[(int)MOVEMENT_2D_ASIX::horizontal] = each_buf;
 	}
@@ -67,12 +75,10 @@ void FourDirectionControl::get(int reciver[]) {
 
 BinaryControl::BinaryControl(
 	const unsigned int& positive_key,
-	const unsigned int& negative_key,
-	const Input*		input_ptr
+	const unsigned int& negative_key
 ) {
 	this->m_positive_key = (int)positive_key;
 	this->m_negative_key = (int)negative_key;
-	this->m_input_ptr 	 = input_ptr;
 }
 
 void BinaryControl::positive_key(const unsigned int& positive_key) {
@@ -91,13 +97,9 @@ int BinaryControl::negative_key() const {
 	return m_negative_key;
 }
 
-void BinaryControl::input(const Input* input) {
-	this->m_input_ptr = input;
-}
-
-int BinaryControl::update() {
-	int positive = m_input_ptr->is_key_down(m_positive_key);
-	int negative = m_input_ptr->is_key_down(m_negative_key);
+int BinaryControl::update(const Input* input_ptr) {
+	int positive = input_ptr->is_key_down(m_positive_key);
+	int negative = input_ptr->is_key_down(m_negative_key);
 	int pressed = positive + negative;
 
 	if(pressed) {
@@ -134,5 +136,30 @@ int BinaryControl::get() {
 	return m_key_buf;
 }
 
+/****************************************************************************
+ *	MouseControl			| Class
+ * 
+ *  
+ ****************************************************************************/
+
+MouseControl::MouseControl(const Input* input_ptr) {
+	m_input_ptr = input_ptr;
+}
+
+void MouseControl::set_speed(double cursor, double zoom) {
+	m_cursor_speed = std::move(cursor);
+	m_zoom_speed = std::move(zoom);
+}
+
+void MouseControl::update() {
+	auto offset =  m_input_ptr->get_mouse_offset();
+
+	m_state[0] += offset[0];
+	m_state[1] += offset[1];
+}
+
+void MouseControl::get(double reciver[]) {
+	memcpy(reciver, m_state, 4 * sizeof(double));
+}
 
 } // end of namespace : input

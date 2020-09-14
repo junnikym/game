@@ -22,22 +22,25 @@ class Entity {
 		void set_model(const string& model);
 
 		bool append_controller(
-			const char* contorller_title,
+			input::ControlType contorller_title,
 			input::ControlPtr& controller,
 			bool overlap = false
 		);
 
 		void remove_controller ( 
-			const char* contorller_title,
+			input::ControlType& contorller_title,
 			bool include_overlap = false
 		);
 
 		void remove_controller (
-			const char* contorller_title,
+			input::ControlType& contorller_title,
 			const int& index
 		);
 
 		void update();
+	private:
+		using DictControl = std::vector< std::pair< input::ControlType, input::Control > >;
+		void input_updater(DictControl& controller);
 
 	private:
 		string m_model;
@@ -46,7 +49,7 @@ class Entity {
 		math::Vector<double> m_position;
 		double m_angle;
 
-		DictVector<input::ControlPtr> m_controller;
+		DictControl m_controller;
 };
 
 } // end of namespace : phy

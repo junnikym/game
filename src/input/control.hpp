@@ -7,17 +7,31 @@
 
 namespace input { 
 
+enum class ControlType {
+	FourDirection,
+	MouseRotation,
+};
+
 class Control;
 class BinaryControl;
+class FourDirectionControl;
+class MouseControl;
 
 using ControlPtr = std::shared_ptr<Control>;
 
 class Control {
 	public:
+		Control() = default;
+		Control(const Input* input_ptr);
 		virtual ~Control() { }
 		
 		virtual void update() { }
 		virtual void get(int reciver[]) { }
+		virtual void get(double reciver[]) { }
+
+		void set_input(const Input* input_ptr);
+	protected:
+		const Input* m_input_ptr = nullptr;
 };
 
 class FourDirectionControl : public Control {
@@ -43,8 +57,6 @@ class FourDirectionControl : public Control {
 		void get(int reciver[]);
 		 
 	private:
-		const Input* m_input_ptr = nullptr;
-
 		BinaryControl* m_vertical = nullptr;
 		BinaryControl* m_horizontal = nullptr;
 
@@ -55,8 +67,7 @@ class BinaryControl {
 	public:
 		BinaryControl(
 			const unsigned int& positive_key,
-			const unsigned int& negative_key,
-			const Input*		input_ptr
+			const unsigned int& negative_key
 		);
 
 		void positive_key(const unsigned int& positive_key);
@@ -65,9 +76,8 @@ class BinaryControl {
 		int positive_key() const;
 		int negative_key() const;
 
-		void input(const Input* input);
 
-		int update();
+		int update(const Input*	input_ptr);
 		int get();
 
 	private:
@@ -85,6 +95,29 @@ class BinaryControl {
 		int m_key_buf = 0;
 		int m_backup_buf = 0;
 };
+
+class MouseControl : public Control {
+	public:
+		MouseControl(const Input* input_ptr);
+
+		void set_speed(double cursor, double zoom);
+
+		/**
+		 *  inheritance from Control class
+		 */
+		void update();
+		void get(double reciver[]);
+
+	private:
+		// speed : angle per mouse move 1 pixel
+		double m_cursor_speed = 1;
+		double m_zoom_speed = 1;
+		
+		// { pitch, yaw, roll, zoom }
+		double m_state[4] = {0, 0, 0, 0};
+};
+
+
 
 } // end of namespace : input
 
