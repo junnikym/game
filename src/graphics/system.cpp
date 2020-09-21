@@ -43,7 +43,24 @@ bool System::initialize() {
 	// input init
 	//--------------------------------------------------
 	#ifdef __OPENGL__
+		double init_cur_x = 0, init_cur_y = 0;
+
 		m_input = &g_input_msger;
+
+		glfwGetCursorPos(m_graphics->get_window(), &init_cur_x, &init_cur_y);
+		m_input->initialize(init_cur_x, init_cur_y);
+
+		/**
+		 * @TODO : connecting with Setting Class
+		 */
+
+		glfwSetInputMode( 
+			m_graphics->get_window(), 
+			GLFW_CURSOR, 
+			GLFW_CURSOR_DISABLED
+		);
+
+		//----------------------------------------
 	#else
 		m_input = new Input;
 		if(m_input == nullptr) 
@@ -64,7 +81,17 @@ bool System::initialize() {
 		m_input
 	));
 
-	main_cam.append_controller("FourDirection", main_cam_controller);
+	main_cam_mouse = ControlPtr( new MouseControl( m_input ) );
+
+	// input::ControlType::
+	main_cam.append_controller(
+		input::ControlType::FourDirection, 
+		main_cam_controller
+	);
+	main_cam.append_controller(
+		input::ControlType::MouseRotation, 
+		main_cam_mouse
+	);
 
 	g_cams.push_back( Camera(vector3(0, 0, 40)) );
 
@@ -124,7 +151,9 @@ void System::run() {
 		 * @ TODO : Delete under the code line
 		 * 			this code wrotten only for test
 		 */
+
 		main_cam_controller->update();
+		main_cam_mouse->update();
 		main_cam.update();
 
 		// ==================== until here ====================

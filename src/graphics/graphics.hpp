@@ -33,6 +33,10 @@ class Graphics {
 
 		int render();
 
+	#ifdef __OPENGL__
+		GLFWwindow* get_window();
+	#endif /* __OPENGL__ */
+
 	private:
 		double screen_color[4] = { 0.0f };
 

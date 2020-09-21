@@ -2,6 +2,8 @@
 #define VECTOR_H
 
 #include "math_alias.hpp"
+#include "../common.hpp"
+#include "../integrate_types.hpp"
 
 namespace math {
 
@@ -47,9 +49,20 @@ class Vector {
 	// Index
 		T& operator [] (const int& index);
 
+		vector3 convert_to_vec3();
+
 	private:
 		std::vector<T> memory;
 		size_t m_size = 0;
+
+	/**
+	 * Memmory member alias
+	 *  -> like x, y, z, a or yaw, pitch, roll ...
+	 */
+	public:
+		T& x() { return memory[0]; }
+		T& y() { return memory[1]; }
+		T& z() { return memory[2]; }
 };
 
 

@@ -40,7 +40,8 @@ class System {
 	 * 			this code wrotten only for test
 	 */
 		ControlPtr main_cam_controller = nullptr;
-		Entity main_cam = Entity(math::Vector<double>{0, 0, 3});
+		ControlPtr main_cam_mouse = nullptr;
+		Entity main_cam = Entity(math::Vector<double>{0, 0, 40});
 };
 
 } // end of namespace : graphics

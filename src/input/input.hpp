@@ -2,6 +2,7 @@
 #define INPUT_H
 
 #include "../common.hpp"
+#include "../math/vector.hpp"
 
 namespace input { 
 

@@ -35,8 +35,6 @@ Camera::Camera(
 }
 
 void Camera::intialize() {
-	cout << "cammera created : " << this << endl;
-
 	this->position 	= vector3(0.0f, 0.0f, 0.0f);
 	this->up 		= vector3(0.0f, 1.0f, 0.0f);
 	this->world_up =  this->up;
@@ -99,13 +97,19 @@ matrix4 Camera::get_view() {
 		
 		if(m_entity == nullptr) 
 			return glm::lookAt(position, position + front, up);
+		else {
+			vector3 temp_pos 	= m_entity->position().convert_to_vec3();
+			vector3 temp_fornt 	= m_entity->front();
+			vector3 temp_up 	= m_entity->up();
 
-		vector3 pos = math_vec_to_glm_vec3<double>(
-			m_entity->position()
-		);
-		pos += position;
-
-		return glm::lookAt(pos, pos + front, up);
+			temp_pos 	+= position;
+			
+			return glm::lookAt(
+				temp_pos, 
+				temp_pos + temp_fornt, 
+				temp_up
+			);
+		}
 
 	#elif defined(__DX__)
 		// @ TODO : Implement
@@ -117,18 +121,7 @@ double Camera::get_zoom() {
 }
 
 void Camera::update() {
-	/* --------------------------------------------------
-	 * x asix : cos( yaw ) * cos ( pitch )
-	 * y asix : sin( pitch )
-	 * z asix : sin( yaw ) * cos ( pitch )
-	 -------------------------------------------------- */
-	front.x = cos( radians(axis.x) ) * cos( radians(axis.y) );
-	front.y = sin( radians(axis.y) );
-	front.z = sin( radians(axis.x) ) * cos( radians(axis.y) );
-
-	this->front = normalize(this->front);
-	this->right = normalize( cross(front, world_up) );
-	this->up 	= normalize( cross(right, front) );
+	
 }
 
 

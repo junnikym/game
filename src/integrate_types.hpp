@@ -10,8 +10,6 @@
 
 #endif
 
-#include "math/vector.hpp"
-
 template<typename T>
 using DictVector = std::vector<std::pair<std::string, T>>;
 
@@ -45,6 +43,9 @@ using DictVector = std::vector<std::pair<std::string, T>>;
  * 	TIMER :
  * 		- OpenGL	: glfwGetTime();
  * 		- DirectX	: 
+ * 
+ * 	MATH FUNCTIONS : 
+ * 		- radians
  */
 
 #if defined(__OPENGL__)
@@ -67,6 +68,9 @@ using DictVector = std::vector<std::pair<std::string, T>>;
 	using matrix4 = glm::mat4;
 
 	constexpr auto get_time = glfwGetTime;
+
+	// < math functions >
+	constexpr auto to_radians = glm::radians<double>;
 
 #elif defined(__DX__)
 	using DEVICE = ID3D11Device;
@@ -96,18 +100,18 @@ using DictVector = std::vector<std::pair<std::string, T>>;
  * functions
  -------------------------------------------------- */
 
-template <class T>
-vector3 math_vec_to_glm_vec3(const math::Vector<T>& vec) {
-	int copy_until = 3;
-	vector3 result;
+// template <class T>
+// vector3 math_vec_to_glm_vec3(const math::Vector<T>& vec) {
+// 	int copy_until = 3;
+// 	vector3 result;
 	
-	if ( vec.size() < 3 )
-		copy_until = vec.size();
+// 	if ( vec.size() < 3 )
+// 		copy_until = vec.size();
 
-	result.x = vec.get(0);	result.y = vec.get(1);	result.z = vec.get(2);
+// 	result.x = vec.get(0);	result.y = vec.get(1);	result.z = vec.get(2);
 
-	return result;
-} 
+// 	return result;
+// } 
 
 /* --------------------------------------------------
  * Structures

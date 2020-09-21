@@ -18,6 +18,9 @@ class FourDirectionControl;
 class MouseControl;
 
 using ControlPtr = std::shared_ptr<Control>;
+using DictControlType = std::pair< input::ControlType, ControlPtr >;
+using DictControl = std::vector< DictControlType >;
+using DictControlIt = DictControl::iterator;
 
 class Control {
 	public:

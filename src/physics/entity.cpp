@@ -6,16 +6,16 @@ Entity::Entity(const math::Vector<double>& position) {
 	m_position = math::Vector<double>(position);
 }
 
-Entity::Entity(const math::Vector<double>& position, double angle) {
+Entity::Entity(const math::Vector<double>& position, math::Vector<double>& angle) {
 	m_position = math::Vector<double>(position);
-	this->m_angle 		= std::move(angle);
+	m_angle = math::Vector<double>(angle);
 }
 
 math::Vector<double> Entity::position() const {
 	return m_position;
 }
 
-double Entity::angle() const {
+math::Vector<double> Entity::angle() const {
 	return m_angle;
 }
 
@@ -23,14 +23,14 @@ void Entity::position(math::Vector<double> position) {
 	m_position = std::move(position);
 }
 
-void Entity::angle(double angle){
+void Entity::angle(math::Vector<double> angle){
 	m_angle = std::move(angle);
 }
 
 bool Entity::append_controller(
-			input::ControlType contorller_title,
-			input::ControlPtr& controller,
-			bool overlap
+	input::ControlType contorller_title,
+	input::ControlPtr& controller,
+	bool overlap
 ) {
 	if(!overlap) {
 		for(auto it : m_controller) {
@@ -66,8 +66,8 @@ void Entity::remove_controller (
 }
 
 void Entity::remove_controller (
-			input::ControlType& contorller_title,
-			const int& index
+	input::ControlType& contorller_title,
+	const int& index
 ) {
 	int passed_index = 0;
 
@@ -84,27 +84,73 @@ void Entity::remove_controller (
 }
 
 void Entity::update() {
-	int control_reciver[2] = { 0, };
 
+	/* --------------------------------------------------
+		Update Entity's State Form Controllers
+	 -------------------------------------------------- */
 	for (auto it = m_controller.begin(); it != m_controller.end(); it++) {
-		it->second->get(control_reciver);
-		
-	//	cout << "controller : " << control_reciver[0] << ", " << control_reciver[1] << endl;
-
-		/**
-		 * @ TODO : Delete under the code line
-		 * 			this code wrotten only for test
-		 */
-
-		m_position[0] -= control_reciver[0];
-		m_position[1] -= control_reciver[1];
-
-		// --------------- until here ---------------
+		this->input_updater(it);
 	}
+
+	/* --------------------------------------------------
+		Calcuate this entity's 3way direction
+		( front, rigth, up )
+
+	 * x asix : cos( yaw ) * cos ( pitch )
+	 * y asix : sin( pitch )
+	 * z asix : sin( yaw ) * cos ( pitch )
+	 -------------------------------------------------- */
+	vector3 axis = m_angle.convert_to_vec3();
+
+	m_front.x = cos( radians(axis.x) ) * cos( radians(axis.y) );
+	m_front.y = sin( radians(axis.y) );
+	m_front.z = sin( radians(axis.x) ) * cos( radians(axis.y) );
+
+	m_front = normalize(this->m_front);
+	m_right = normalize( cross(m_front, m_up) );
+	m_up 	= normalize( cross(m_right, m_front) );
+
+	cout << "m_front is ( " << m_angle[0] << ", " << m_angle[1] << ", " << m_angle[2] << ") " << endl;
 }
 
-void Entity::input_updater(DictControl& controller) {
+void Entity::input_updater(DictControlIt& it) {
 
+	switch(it->first) {
+		case input::ControlType::FourDirection:
+		{
+			int reciver[2] = { 0, };
+			it->second->get(reciver);
+
+			// !TODO : classify movement like smooth, normal...
+			m_position[0] -= reciver[0];
+			m_position[1] -= reciver[1];
+			
+			return;
+		}
+		
+		case input::ControlType::MouseRotation:
+		{
+			double reciver[4] = { 0.0, };
+			it->second->get(reciver);
+			
+			m_angle[0] += reciver[0];
+			m_angle[1] += reciver[1];
+			m_angle[2] += reciver[2];
+
+			/**
+			 * !TODO : Zoom; 
+			 * 		   calc the front vector -> move entity as much as reciver[4]
+			 */
+
+			return;
+		}
+		
+		default:
+			break;
+	}
+
+	return;
 }
+
 
 } // end of namespace : phy

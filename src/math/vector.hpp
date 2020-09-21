@@ -10,14 +10,22 @@ namespace math {
 template <class T>
 Vector<T>::Vector(const Vector<T>& other) {
 	this->m_size = other.m_size;
-
 	this->memory.resize(m_size);
+	
 	this->memory.assign(other.memory.begin(), other.memory.end());
+
+//	for(int i = 0; i < m_size; i++) {
+//		ref_for_alias[i] = &this->memory[i];
+//	}
 }
 
 template <class T>
 Vector<T>::Vector(std::initializer_list<T> il) : memory(il) {
 	m_size = il.size();
+
+//	for(int i = 0; i < m_size; i++) {
+//		ref_for_alias[i] = &this->memory[i];
+//	}
 }
 
 template <class T>
@@ -76,6 +84,11 @@ Vector<T> Vector<T>::get_normalize() {
 template <class T>
 void Vector<T>::append( T elem ) {
 	this->memory.push_back( move(elem) );
+
+	if(m_size < 4) {
+		this->ref_for_alias[m_size] = &this->memory[m_size];
+	}
+
 	m_size++;
 }
 
@@ -85,7 +98,11 @@ void Vector<T>::append( T elem ) {
 
 template <class T>
 Vector<T>& Vector<T>::operator += (const Vector& rhs) {
-	
+	for(int i = 0; i < m_size; i++) {
+		memory[i] += rhs.get(i);
+	}
+
+	return *this;
 }
 
 template <class T>
@@ -160,6 +177,17 @@ bool Vector<T>::operator != (const Vector &other) const {
 template <class T>
 T& Vector<T>::operator [] (const int& index) {
 	return memory[index];
+}
+
+template <class T>
+vector3 Vector<T>:: convert_to_vec3() {
+	vector3 result = {
+		this->memory[0],
+		this->memory[1],
+		this->memory[2]
+	};
+
+	return result;
 }
 
 }	// end of namespace (math)

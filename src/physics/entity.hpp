@@ -8,16 +8,18 @@
 
 namespace phy {
 
+using namespace input;
+
 class Entity {
 	public:
 		Entity(const math::Vector<double>& position);
-		Entity(const math::Vector<double>& position, double angle);
+		Entity(const math::Vector<double>& position, math::Vector<double>& angle);
 
 		math::Vector<double> position() const;
-		double angle() const;
+		math::Vector<double> angle() const;		
 
 		void position(math::Vector<double> position);
-		void angle(double angle);
+		void angle(math::Vector<double> angle);
 
 		void set_model(const string& model);
 
@@ -39,17 +41,29 @@ class Entity {
 
 		void update();
 	private:
-		using DictControl = std::vector< std::pair< input::ControlType, input::Control > >;
-		void input_updater(DictControl& controller);
+		void input_updater(DictControlIt& it);
 
 	private:
 		string m_model;
 
 		// Entity State
-		math::Vector<double> m_position;
-		double m_angle;
+		math::Vector<double> m_position = {0.0, 0.0, 0.0};
+		math::Vector<double> m_angle = {0.0, 0.0, 0.0};
 
 		DictControl m_controller;
+
+	/**
+	 *  The members for graphics
+	 */
+	private:
+		vector3 m_front = {0.0, 0.0, -1.0};
+		vector3 m_right = {0.0, 0.0, 0.0};
+		vector3 m_up	 = {0.0, 1.0, 0.0};
+
+	public:
+		vector3 front() const { return m_front; }
+		vector3 right() const { return m_right; }
+		vector3 up() 	const { return m_up; }
 };
 
 } // end of namespace : phy

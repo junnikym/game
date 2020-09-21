@@ -189,4 +189,10 @@ int Graphics::render() {
 	return 1;	// maintain a loop 
 }
 
+#ifdef __OPENGL__
+	GLFWwindow* Graphics::get_window() {
+		return this->window;
+	}
+#endif /* __OPENGL__ */
+
 } // end of namespace : graphics
