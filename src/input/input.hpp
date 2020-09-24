@@ -8,7 +8,7 @@ namespace input {
 
 class Input {
 	public:
-		Input();
+		Input() = default;
 
 		void initialize(const double& cursor_x, const double& cursor_y); 
 		
@@ -28,6 +28,7 @@ class Input {
 
 	private:
 		int m_keys[512];
+		DEVICE* m_window;
 
 		math::Vector<double> m_mouse_pos = {0, 0};
 		math::Vector<double> m_mouse_scroll = {0, 0};

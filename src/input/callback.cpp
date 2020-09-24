@@ -19,10 +19,6 @@ namespace input {
 			g_input_msger.key_up( key );
 	}
 
-	void mouse_cursor_callback(GLFWwindow* window, double pos_x, double pos_y) {
-		g_input_msger.update_mouse_pos(pos_x, pos_y);
-	}
-
 	void mouse_scroll_callback(GLFWwindow* window, double x_offset, double y_offset) {
 		g_input_msger.update_mouse_scroll(x_offset, y_offset);
 	}

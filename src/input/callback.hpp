@@ -12,8 +12,6 @@ namespace input {
 
 	void key_callback(GLFWwindow* window, int key, int scan_code, int action, int mods);
 
-	void mouse_cursor_callback(GLFWwindow* window, double pos_x, double pos_y);
-
 	void mouse_scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
 
 #endif /* __OPENGL__ or __DX__ */

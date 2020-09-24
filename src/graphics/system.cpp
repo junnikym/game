@@ -134,6 +134,7 @@ void System::set_screen_size(int width, int height) {
 
 void System::run() {
 	int exit = 0;
+	double cur_x = 0, cur_y = 0;
 
 	#ifdef __OPENGL__	
 		m_graphics->clear_screen();
@@ -147,6 +148,10 @@ void System::run() {
 	#endif /* __OPENGL__ */
 	
 	do {
+		// Input -> Mouse Update
+		glfwGetCursorPos(m_graphics->get_window(), &cur_x, &cur_y);
+		m_input->update_mouse_pos(std::move(cur_x), std::move(cur_y));
+		
 		/**
 		 * @ TODO : Delete under the code line
 		 * 			this code wrotten only for test

@@ -8,8 +8,6 @@ namespace input {
  *  Process input through graphics lib
  ****************************************************************************/
 
-Input::Input() { }
-
 void Input::initialize(const double& cursor_x, const double& cursor_y) {
 	fill_n(m_keys, 256, 0);
 	m_mouse_pos = {cursor_x, cursor_y};
@@ -26,9 +24,10 @@ void Input::key_up( int& key ) {
 }
 
 void Input::update_mouse_pos( const double& x, const double& y ) {
-	math::Vector<double> current_pos= {x, y};
+	math::Vector<double> current_pos={x, y};
 	
 	m_mouse_offset = current_pos - m_mouse_pos;
+
 	m_mouse_pos = move(current_pos);
 }
 

@@ -100,6 +100,7 @@ void Entity::update() {
 	 * y asix : sin( pitch )
 	 * z asix : sin( yaw ) * cos ( pitch )
 	 -------------------------------------------------- */
+	m_angle[1] += 1;
 	vector3 axis = m_angle.convert_to_vec3();
 
 	m_front.x = cos( radians(axis.x) ) * cos( radians(axis.y) );
@@ -109,8 +110,6 @@ void Entity::update() {
 	m_front = normalize(this->m_front);
 	m_right = normalize( cross(m_front, m_up) );
 	m_up 	= normalize( cross(m_right, m_front) );
-
-	cout << "m_front is ( " << m_angle[0] << ", " << m_angle[1] << ", " << m_angle[2] << ") " << endl;
 }
 
 void Entity::input_updater(DictControlIt& it) {
@@ -132,10 +131,10 @@ void Entity::input_updater(DictControlIt& it) {
 		{
 			double reciver[4] = { 0.0, };
 			it->second->get(reciver);
-			
-			m_angle[0] += reciver[0];
-			m_angle[1] += reciver[1];
-			m_angle[2] += reciver[2];
+
+			m_angle[0] = std::move(reciver[0]);
+			m_angle[1] = std::move(reciver[1]);
+			//m_angle[2] = std::move(reciver[2]);
 
 			/**
 			 * !TODO : Zoom; 

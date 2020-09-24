@@ -59,7 +59,6 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 
 	// set callback functions
 	glfwSetKeyCallback(this->window, input::key_callback);
-	glfwSetCursorPosCallback(this->window, input::mouse_cursor_callback);
 	glfwSetScrollCallback(this->window, input::mouse_scroll_callback);
 	glfwSetFramebufferSizeCallback(this->window, frame_buf_size_callback);
 
