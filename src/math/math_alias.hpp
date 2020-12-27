@@ -7,4 +7,7 @@
 using namespace std;
 using size_t_r = const size_t&;	// size type reference
 
+#define Square(X) 	((X) * (X))
+#define Cube(X) 	(Square(X) * (X))
+
 #endif

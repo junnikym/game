@@ -13,10 +13,11 @@ class Matrix {
 
 	public:
 		Matrix(size_t_r row, size_t_r col);
+		Matrix(VecIniter<T> il);
 
 		size_t row() const;
 		size_t col() const;
-		T get(const unsigned int& row, const unsigned int col) const;
+		T get(const unsigned int& row, const unsigned int& col) const;
 		T get_directly(const unsigned int& index) const;
 
 		void resize( size_t_r row, size_t_r col);

@@ -22,6 +22,8 @@
 	#include <cstring>
 	#include <cstddef>
 
+	#include <limits>
+
 	using namespace std;
 
 	#ifdef _WIN32			// at windows OS

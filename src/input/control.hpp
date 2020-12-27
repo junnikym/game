@@ -111,13 +111,17 @@ class MouseControl : public Control {
 		void update();
 		void get(double reciver[]);
 
+		/**	
+		 * setting member :
+		 * 	@ Type : BitFlag
+		 */
+		int setting = 0;
 	private:
 		// speed : angle per mouse move 1 pixel
-		double m_cursor_speed = 1;
+		double m_cursor_speed = 0.1;
 		double m_zoom_speed = 1;
-		
-		// { pitch, yaw, roll, zoom }
-		double m_state[4] = {0, 0, 0, 0};
+
+		math::Vector<double> m_offset;
 };
 
 

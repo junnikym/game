@@ -1,5 +1,6 @@
 # Build related file or directory
 
+build/
 project/
 obj/
 bin/
@@ -13,3 +14,7 @@ main
 # OS Files
 
 .DS_Store
+
+# Setting
+
+.vscode
