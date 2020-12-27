@@ -4,11 +4,33 @@ namespace phy {
 
 Entity::Entity(const math::Vector<double>& position) {
 	m_position = math::Vector<double>(position);
+
+	this->initialize();
 }
 
 Entity::Entity(const math::Vector<double>& position, math::Vector<double>& angle) {
 	m_position = math::Vector<double>(position);
 	m_angle = math::Vector<double>(angle);
+
+	this->initialize();
+}
+
+Entity::~Entity() {
+	release();
+}
+
+void Entity::initialize(){
+	m_front = normalize( m_front );
+	m_right = normalize( cross(m_front, m_up) );
+	m_up 	= normalize( cross(m_right, m_front) );
+}
+
+void Entity::release() {
+
+	for( auto it : m_force ) {
+		delete it.second;
+	}
+
 }
 
 math::Vector<double> Entity::position() const {
@@ -39,6 +61,8 @@ bool Entity::append_controller(
 			}
 		}
 	}
+
+	append_control_force(contorller_title);
 
 	m_controller.push_back( 
 		std::move( std::make_pair(
@@ -100,15 +124,13 @@ void Entity::update() {
 	 * y asix : sin( pitch )
 	 * z asix : sin( yaw ) * cos ( pitch )
 	 -------------------------------------------------- */
-	m_angle[1] += 1;
-	vector3 axis = m_angle.convert_to_vec3();
 
-	m_front.x = cos( radians(axis.x) ) * cos( radians(axis.y) );
-	m_front.y = sin( radians(axis.y) );
-	m_front.z = sin( radians(axis.x) ) * cos( radians(axis.y) );
-
-	m_front = normalize(this->m_front);
-	m_right = normalize( cross(m_front, m_up) );
+	m_front.x = cos( radians(m_angle[YAW]) ) * cos( radians(m_angle[PITCH]) );
+	m_front.y = sin( radians(m_angle[PITCH]) );
+	m_front.z = sin( radians(m_angle[YAW]) ) * cos( radians(m_angle[PITCH]) );
+	
+	m_front = normalize( m_front );
+	m_right = normalize( cross(m_front, m_world_up) );
 	m_up 	= normalize( cross(m_right, m_front) );
 }
 
@@ -120,9 +142,11 @@ void Entity::input_updater(DictControlIt& it) {
 			int reciver[2] = { 0, };
 			it->second->get(reciver);
 
-			// !TODO : classify movement like smooth, normal...
-			m_position[0] -= reciver[0];
-			m_position[1] -= reciver[1];
+			m_4d_force_ptr->set_vec( { (double)reciver[0], (double)reciver[1], 0 });
+			auto test =  m_4d_force_ptr->update();
+			m_position += test;
+
+			//cout << test[0] << ", " << test[1] << ", " << test[2] << ", " << endl;
 			
 			return;
 		}
@@ -132,8 +156,8 @@ void Entity::input_updater(DictControlIt& it) {
 			double reciver[4] = { 0.0, };
 			it->second->get(reciver);
 
-			m_angle[0] = std::move(reciver[0]);
-			m_angle[1] = std::move(reciver[1]);
+			m_angle[0] += reciver[0];
+			m_angle[1] += reciver[1];
 			//m_angle[2] = std::move(reciver[2]);
 
 			/**
@@ -149,6 +173,32 @@ void Entity::input_updater(DictControlIt& it) {
 	}
 
 	return;
+}
+
+void Entity::append_control_force(const input::ControlType& controller_type) {
+	switch(controller_type) {
+		case input::ControlType::FourDirection:
+		{
+			if(m_4d_force_ptr != nullptr)
+				return;
+
+			m_force.push_back( make_pair<string, Force*>(
+				"Controller_4D", new Accelator( {1, 0, 0}, 100 )
+			));
+
+			m_4d_force_ptr = m_force.back().second;
+
+			return;
+		}
+
+		case input::ControlType::MouseRotation:
+		{
+			return;
+		}
+
+		default:
+			break;
+	}
 }
 
 
