@@ -14,58 +14,68 @@ using math::MathVecList;
  * Single shape's archetype class
  */
 class Shape {
+	// < Meber Fields >
+	//--------------------------------------------------
 	private:
 		math::Vector<double> m_center_of_gravity;
 		MathVecList<double> m_verties;
+
+	// < Constructor >
+	//--------------------------------------------------
 	public:
 		Shape() = delete;
 		Shape(MathVecList<double> verties);
 		Shape(std::initializer_list<math::Vector<double>> il);
 
+		Shape(
+			MathVecList<double> verties, 
+			const math::Vector<double>* center
+		);
+
+	// < Getters >
+	//--------------------------------------------------
+	public:
 		const math::Vector<double>* get_center();
 
 		size_t get_n_vertex();
 		auto get_vertex(int i);
 		const MathVecList<double>* get_verties() const;
 
-		Shape ratation(
-			const double& x, const double& y, const double& z,  
-			const bool& is_radian = false,
-			const math::Vector<double>* center = nullptr
-		);
+		template < class... Args >
+		using TransFunc = std::function< math::Vector<double>* (math::Vector<double>*, const Args&...) >;
 
-		Shape ratation(
-			const double& angle,
-			const bool& is_radian = false,
-			const math::Vector<double>* center = nullptr
-		);
-
-		Shape* rotation(
+		template < class... Args >
+		Shape* transform(
 			Shape* p_out,
-			const double& x, const double& y, const double& z,  
-			const bool& is_radian = false,
-			const math::Vector<double>* center = nullptr
+			TransFunc<Args...> func,
+			const Args&... args
 		);
 
-		Shape* rotation(
-			Shape* p_out,
-			const double& angle,
-			const bool& is_radian = false,
-			const math::Vector<double>* center = nullptr
-		);
-
-	private:
-		template < class ... Args >
-		void rotation_splitter( Shape* p_out,
-								const math::Vector<double>* center, 
-								const Args& ... args );
-
-	public:
-		// Shape&& Move( const math::Vector<double>& pos );
-
+	// < etc >
+	//--------------------------------------------------
 	private:
 		void calc_center();
 };
+
+
+// < implementations of Transfrom Function >
+//--------------------------------------------------
+
+template < class... Args > 
+Shape* Shape::transform (
+	Shape* p_out,
+	Shape::TransFunc<Args...> func,
+	const Args&... args
+) {
+	if(p_out->get_n_vertex() != m_verties.size())
+		p_out->m_verties = m_verties;
+
+	for(int i = 0; i < m_verties.size(); i++)
+		func( &(p_out->m_verties[i]), args... );
+
+	return p_out;
+}
+
 
 } // end of namespace : phy
 
