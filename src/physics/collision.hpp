@@ -39,6 +39,34 @@ class CollisionDetector {
 // 	private: static constexpr int priority = 23;
 // };
 
+/*
+
+var project = function (worldPoints, axisVector) {
+
+			var projection = { min : 0, max : 0, results : [] };
+
+			projection.max = axisVector.dot(worldPoints[0]);
+			projection.min = projection.max;
+
+			worldPoints.forEach((point) => {
+
+				var p = axisVector.dot(point);
+
+				if (p < projection.min) {
+					projection.min = p;
+				} else if (p > projection.max) {
+					projection.max = p;
+				}
+
+				projection.results.push(p);
+			});
+
+			return projection;
+		};
+
+
+*/
+
 class CollisionDetector_SAT : public CollisionDetector {
 	public:
 		CollisionIndicator detect ( 

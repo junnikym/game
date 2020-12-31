@@ -42,9 +42,9 @@ double Vector<T>::length() {
 	double result = 0.0;
 
 	for(auto it : memory)
-		result += it;
+		result += it * it;
 	
-	return result /= this->size();
+	return std::sqrt(result);
 }
 
 /* ==================================================
@@ -61,7 +61,7 @@ template <class T>
 void Vector<T>::normalize() {
 	double length = this->length();
 
-	for(auto it : memory)
+	for(auto& it : memory)
 		it /= length;
 }
 
@@ -103,18 +103,6 @@ void Vector<T>::rotation(
 	this->rotation_x(z);
 }
 
-//static
-template <class T>
-math::Vector<T> Vector<T>::rotation(
-	const math::Vector<T>& vector,
-	const double& x, const double& y, const double& z,
-	const bool& is_radian
-) {
-	math::Vector<T> result(vector);
-	result.rotation(x, y, z, is_radian);
-	return std::move(result);
-}
-
 template <class T>
 void Vector<T>::rotation(double angle, const bool& is_radian) {
 	if( !is_radian )
@@ -125,7 +113,41 @@ void Vector<T>::rotation(double angle, const bool& is_radian) {
 
 //static
 template <class T>
-math::Vector<T> Vector<T>::rotation(
+math::Vector<T>* Vector<T>::rotation (
+	math::Vector<T>* p_out,
+	const double& x, const double& y, const double& z,
+	const bool& is_radian
+) {
+	p_out->rotation(x, y, z, is_radian);
+	return p_out;
+}
+
+//static
+template <class T>
+math::Vector<T>* Vector<T>::rotation (
+	math::Vector<T>* p_out,
+	const double& angle,
+	const bool& is_radian
+) {
+	p_out->rotation(angle, is_radian);
+	return p_out;
+}
+
+//static
+template <class T>
+math::Vector<T> Vector<T>::rotation_copy(
+	const math::Vector<T>& vector,
+	const double& x, const double& y, const double& z,
+	const bool& is_radian
+) {
+	math::Vector<T> result(vector);
+	result.rotation(x, y, z, is_radian);
+	return std::move(result);
+}
+
+//static
+template <class T>
+math::Vector<T> Vector<T>::rotation_copy(
 	const math::Vector<T>& vector,
 	const double& angle,
 	const bool& is_radian
@@ -169,6 +191,15 @@ void Vector<T>::rotation_z(const double& angle) {
 	};
 
 	*this *= rotation_mat;
+}
+
+template <class T>
+math::Vector<double>* Vector<T>::move (
+	math::Vector<T>* p_out,
+	const math::Vector<T>& to_where
+) {
+	(*p_out) += to_where;
+	return p_out;
 }
 
 /* ==================================================

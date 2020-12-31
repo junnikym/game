@@ -44,10 +44,12 @@ class Shape {
 		template < class... Args >
 		using TransFunc = std::function< math::Vector<double>* (math::Vector<double>*, const Args&...) >;
 
-		template < class... Args >
+	// < Translate >
+	//--------------------------------------------------
+		template < class Func, class... Args >
 		Shape* transform(
 			Shape* p_out,
-			TransFunc<Args...> func,
+			Func func,
 			const Args&... args
 		);
 
@@ -55,16 +57,17 @@ class Shape {
 	//--------------------------------------------------
 	private:
 		void calc_center();
+
 };
 
 
 // < implementations of Transfrom Function >
 //--------------------------------------------------
 
-template < class... Args > 
+template < class Func, class... Args > 
 Shape* Shape::transform (
 	Shape* p_out,
-	Shape::TransFunc<Args...> func,
+	Func func,
 	const Args&... args
 ) {
 	if(p_out->get_n_vertex() != m_verties.size())

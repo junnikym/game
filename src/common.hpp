@@ -23,6 +23,7 @@
 	#include <cstddef>
 
 	#include <limits>
+	#include <functional>
 
 	using namespace std;
 

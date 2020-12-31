@@ -38,7 +38,7 @@ class Vector {
 		static double abs_dot(const Vector<T>& v1, const Vector<T>& v2);
 
 		/**
-		 * Rotation function for Over the 3D
+		 * @brief Rotation function for Over the 3D
 		 * 
 		 * @param x x-axis rotation angle
 		 * @param y y-axis rotation angle
@@ -49,25 +49,78 @@ class Vector {
 			double x, double y, double z,
 			const bool& is_radian = false
 		);
-
-		static math::Vector<T> rotation (
-			const math::Vector<T>& vector,
-			const double& x, const double& y, const double& z,
-			const bool& is_radian = false
-		);
 		
 		/**
-		 * Rotation on 2D Coord
+		 * @brief Rotation on 2D Coord
 		 * 
 		 * @param angle rotation angle
 		 * @param is_radian rotation angle's value is radina -> true, or degree -> false (default : false)
 		 */
 		void rotation(double angle, const bool& is_radian = false);
 
-		static math::Vector<T> rotation (
+		/**
+		 * @brief Rotation function for Over the 3D
+		 * 
+		 * @param p_out object address for result
+		 * @param x x-axis rotation angle
+		 * @param y y-axis rotation angle
+		 * @param z z-axis rotation angle
+		 * @param is_radian is Angle Param radian?
+		 * @return p_out
+		 */
+		static math::Vector<T>* rotation (
+			math::Vector<T>* p_out,
+			const double& x, const double& y, const double& z,
+			const bool& is_radian = false
+		);
+
+		/**
+		 * @brief Rotation on 2D Coord
+		 * 
+		 * @param p_out object address for result
+		 * @param angle rotation angle
+		 * @param is_radian is Angle Param radian?s
+		 * @return math::Vector<T>* 
+		 */
+		static math::Vector<T>* rotation (
+			math::Vector<T>* p_out,
+			const double& angle,
+			const bool& is_radian = false
+		);
+
+		/**
+		 * @brief Rotation function for Over the 3D -> returning result
+		 * 
+		 * @param vector base model
+		 * @param x x-axis rotation angle
+		 * @param y y-axis rotation angle
+		 * @param z z-axis rotation angle
+		 * @param is_radian is Angle Param radian?
+		 * @return math::Vector<T> type return
+		 */
+		static math::Vector<T> rotation_copy (
+			const math::Vector<T>& vector,
+			const double& x, const double& y, const double& z,
+			const bool& is_radian = false
+		);
+
+		/**
+		 * @brief Rotation on 2D -> returning result
+		 * 
+		 * @param vector base model
+		 * @param angle rotation angle
+		 * @param is_radian is Angle Param radian?
+		 * @return math::Vector<T> type return
+		 */
+		static math::Vector<T> rotation_copy (
 			const math::Vector<T>& vector,
 			const double& angle,
 			const bool& is_radian = false
+		);
+
+		static math::Vector<double>* move (
+			math::Vector<T>* p_out,
+			const math::Vector<T>& to_where
 		);
 
 	private:

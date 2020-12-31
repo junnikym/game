@@ -23,15 +23,9 @@ CollisionIndicator CollisionDetector_SAT::detect(
 	const Shape& lhs, const Vector<double>& lhs_pos, const double& lhs_angle,
 	const Shape& rhs, const Vector<double>& rhs_pos, const double& rhs_angle
 ) {
-
 	CollisionIndicator result;
 
-	// 1. Move and Rotate Shapes
-	//--------------------------------------------------
-	
-	
-
-	// 2. Get all axis of shapes
+	// 1. Get all axis of shapes
 	//--------------------------------------------------
 	MathVecList<double> axes;
 
@@ -52,7 +46,7 @@ CollisionIndicator CollisionDetector_SAT::detect(
 	get_axis(lhs);
 	get_axis(rhs);
 
-	// 3. Project point to axis
+	// 2. Project point to axis
 	//--------------------------------------------------
 	auto project = [] ( const Shape& shape,
 						const math::Vector<double>& pos, 
@@ -64,14 +58,13 @@ CollisionIndicator CollisionDetector_SAT::detect(
 
 		result.max = Vector<double>::dot(axis, (*points)[0]);
 		result.min = result.max;
-		result.dots.push_back(result.max);
 
 		for(int i = 1; i < points->size(); i++) {
 			comp_dot = Vector<double>::dot(axis, (*points)[i]);
 			
 			if (comp_dot < result.min) 
 				result.min = comp_dot;
-			else if (comp_dot < result.max)
+			else if (comp_dot > result.max)
 				result.max = comp_dot;
 
 			result.dots.push_back(comp_dot);
@@ -86,7 +79,12 @@ CollisionIndicator CollisionDetector_SAT::detect(
 		auto lhs_proj = project(lhs, lhs_pos, it);
 		auto rhs_proj = project(rhs, rhs_pos, it);
 
-		if (lhs_proj.min <= rhs_proj.max && lhs_proj.max <= rhs_proj.min) {
+		std::cout << "lhs : ( " << 
+			lhs_proj.min << ", " << lhs_proj.max << " ) // " <<
+			"rhs : ( " << 
+			rhs_proj.min << ", " << rhs_proj.max << " ) " << std::endl;
+
+		if (lhs_proj.min <= rhs_proj.max & lhs_proj.max >= rhs_proj.min) {
 			auto overlap = std::min( 
 								rhs_proj.max - lhs_proj.min, 
 								lhs_proj.max - rhs_proj.min 

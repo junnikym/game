@@ -4,6 +4,7 @@
 //#include "graphics/system.hpp"
 #include "./physics/shape.hpp"
 #include "./physics/collision.hpp"
+#include "./math/vector.hpp"
 
 using namespace std;
 
@@ -24,17 +25,44 @@ int main() {
 
 // 	system.shutdown(); 
 
-	phy::Shape triangle_mather{{-1, -1}, {0, 1}, {1, -1}};
-	phy::Shape polygon_mather{{0, 1}, {1, 0.3}, {0.6, -1}, {-0.6, -1}, {-1, 0.3}};
+	// phy::Shape triangle_mather{{-1, -1}, {0, 1}, {1, -1}};
+	// phy::Shape polygon_mather{{0, 1}, {1, 0.3}, {0.6, -1}, {-0.6, -1}, {-1, 0.3}};
 
 	math::Vector<double> triangle_pos {2, 2};
-	math::Vector<double> polygon_pos {2, 2};
+	math::Vector<double> polygon_pos {2, 1};
 
 	double triangle_angle = 20.0;
 	double polygon_angle = 0.0;
 
-	phy::Shape triangle = triangle_mather.ratation(triangle_angle);
-	phy::Shape polygon = polygon_mather.ratation(polygon_angle);
+	// phy::Shape triangle = triangle_mather.ratation(triangle_angle);
+	// phy::Shape polygon = polygon_mather.ratation(polygon_angle);
+
+	phy::Shape triangle{{-1, -1}, {0, 1}, {1, -1}};
+	phy::Shape polygon{{0, 1}, {1, 0.3}, {0.6, -1}, {-0.6, -1}, {-1, 0.3}};
+
+	// std::function <math::Vector<double>* (
+	// 		math::Vector<double>*, const double&, const bool&
+	// 	)> rotation_func = static_cast<math::Vector<double>* (*)(math::Vector<double>*, const double&, const bool&)> (math::Vector<double>::rotation);
+
+	triangle.transform(
+		&triangle, 
+		static_cast<math::Vector<double>* (*)(math::Vector<double>*, const double&, const bool&)> (math::Vector<double>::rotation),
+		triangle_angle,
+		false
+	);
+
+	polygon.transform(
+		&polygon, 
+		static_cast<math::Vector<double>* (*)(math::Vector<double>*, const double&, const bool&)> (math::Vector<double>::rotation),
+		polygon_angle,
+		false
+	);
+
+	// polygon.transform(
+	// 	&polygon, 
+	// 	static_cast<math::Vector<double>* (*)(math::Vector<double>*, const math::Vector<double>&)> (math::Vector<double>::move),
+	// 	polygon_pos
+	// );
 
 	int count = 0;
 	auto vec = triangle.get_verties();
@@ -63,17 +91,15 @@ int main() {
 	}
 	cout << " )" << endl;
 
-	phy::CollisionDetector* detector = new phy::CollisionDetector_SAT();
-	auto result = detector->detect(
+	phy::CollisionDetector_SAT detector;
+	auto result = detector.detect(
 		*triangle.get_verties(), triangle_pos, triangle_angle,
 		*polygon.get_verties(), polygon_pos, polygon_angle
 	); 
 
-	// cout << "state : " << result.state <<endl;
+	cout << "state : " << result.state <<endl;
 	
 	cout << "test success" << endl;
-
-	//delete detector;
 
 	return 0;
 }
