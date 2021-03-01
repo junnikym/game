@@ -47,14 +47,15 @@ add_definitions(
 
 add_executable(main
 	src/main.cpp
+
+	# graphics
+
 	src/graphics/callback.hpp
 	src/graphics/callback.cpp
-	src/graphics/common.hpp
+	src/graphics/camera.hpp
+	src/graphics/camera.cpp
 	src/graphics/graphics.hpp
 	src/graphics/graphics.cpp
-	src/graphics/input.hpp
-	src/graphics/input.cpp
-	src/graphics/integrate_types.hpp
 	src/graphics/mesh.hpp
 	src/graphics/mesh.cpp
 	src/graphics/model.hpp
@@ -65,7 +66,36 @@ add_executable(main
 	src/graphics/system.cpp
 	src/graphics/texture.hpp
 	src/graphics/texture.cpp
+
+	# input 
+
+	src/input/callback.hpp
+	src/input/callback.cpp
+	src/input/input.hpp
+	src/input/input.cpp
+	src/input/control.hpp
+	src/input/control.cpp
+
+	#math
+	
+	src/math/math_alias.hpp
+
+	src/math/matrix.h
+	src/math/matrix.hpp
+	src/math/vector.h
+	src/math/vector.hpp
+
+	#physics
+	
+	src/physics/entity.hpp
+	src/physics/entity.cpp
+
+	# etc
+	
+	src/integrate_types.hpp
+	src/common.hpp
 )
+
 
 target_link_libraries(main
 	${ALL_LIBS}
