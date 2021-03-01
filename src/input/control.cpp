@@ -152,14 +152,12 @@ void MouseControl::set_speed(double cursor, double zoom) {
 }
 
 void MouseControl::update() {
-	auto offset =  m_input_ptr->get_mouse_offset();
-
-	m_state[0] += offset[0];
-	m_state[1] += offset[1];
+	m_offset =  m_input_ptr->get_mouse_offset() * m_cursor_speed;
 }
 
 void MouseControl::get(double reciver[]) {
-	memcpy(reciver, m_state, 4 * sizeof(double));
+	reciver[0] = m_offset[0];
+	reciver[1] = m_offset[1];
 }
 
 } // end of namespace : input

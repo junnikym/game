@@ -14,3 +14,7 @@ main
 # OS Files
 
 .DS_Store
+
+# Setting
+
+.vscode

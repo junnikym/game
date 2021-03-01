@@ -13,6 +13,9 @@
 template<typename T>
 using DictVector = std::vector<std::pair<std::string, T>>;
 
+template<class T>
+using VecIniter = std::initializer_list< std::vector<T> >;
+
 /*
  *	DEVICE :
  *		- OpenGL	: GLuint
@@ -67,7 +70,7 @@ using DictVector = std::vector<std::pair<std::string, T>>;
 	// < matrix >
 	using matrix4 = glm::mat4;
 
-	constexpr auto get_time = glfwGetTime;
+	constexpr auto _get_time = glfwGetTime;
 
 	// < math functions >
 	constexpr auto to_radians = glm::radians<double>;
@@ -148,10 +151,10 @@ enum class DIRECTION {
 	backward,	// negative - Z
 };
 
-enum class ROTATION_AXIS {
-	yaw = 0,
-	pitch = 1,
-	roll = 2,
+enum ROTATION_AXIS {
+	YAW = 0,
+	PITCH = 1,
+	ROLL = 2,
 };
 
 #endif

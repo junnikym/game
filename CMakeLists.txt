@@ -1,4 +1,3 @@
-
 ### CMake Entry Point ###
 
 ## < Project > ##
@@ -41,7 +40,15 @@ add_definitions(
     -lGLEW
     -lglfw
 	-lassimp
+	-g
 )
+
+## < config > ##
+
+#configure_file(config/root.h.in config/root.h)
+#include_directories(
+#	${CMAKE_BINARY_DIR}/configuration
+#)
 
 ## < src > ##
 
@@ -87,8 +94,14 @@ add_executable(main
 
 	#physics
 	
+	src/physics/collision.hpp
+	src/physics/collision.cpp
 	src/physics/entity.hpp
 	src/physics/entity.cpp
+	src/physics/force.hpp
+	src/physics/force.cpp
+	src/physics/shape.hpp
+	src/physics/shape.cpp
 
 	# etc
 	

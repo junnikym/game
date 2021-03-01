@@ -23,6 +23,16 @@ Matrix<T>::Matrix(size_t_r row, size_t_r col) {
 }
 
 template <class T>
+Matrix<T>::Matrix(VecIniter<T> il) {
+	m_row = il.size();
+	m_col = il.begin()->size();
+
+	for(auto& it : il) {
+		memory.insert(memory.end(), it.begin(), it.end());
+	}
+}
+
+template <class T>
 void Matrix<T>::resize_col( size_t_r col ) {
 
 }
@@ -47,7 +57,7 @@ size_t Matrix<T>::col() const {
 }
 
 template <class T>
-T Matrix<T>::get(const unsigned int& row, const unsigned int col) const {
+T Matrix<T>::get(const unsigned int& row, const unsigned int& col) const {
 	return memory[ m_row * col + row ];
 }
 
