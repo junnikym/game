@@ -19,6 +19,7 @@ include_directories(
 	lib/assimp/include/
 	lib/assimp/code/include/
 	lib/stb/
+	lib/tinyxml2/
 )
 
 set(ALL_LIBS
@@ -26,6 +27,7 @@ set(ALL_LIBS
 	glfw
 	GLEW_LIB
 	assimp
+	tinyxml2
 )
 
 add_definitions(

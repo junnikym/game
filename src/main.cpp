@@ -6,7 +6,10 @@
 #include "./physics/collision.hpp"
 #include "./math/vector.hpp"
 
+#include <tinyxml2.h>
+
 using namespace std;
+using namespace tinyxml2;
 
 int main() {
 //	bool result = false;
@@ -28,35 +31,35 @@ int main() {
 	// phy::Shape triangle_mather{{-1, -1}, {0, 1}, {1, -1}};
 	// phy::Shape polygon_mather{{0, 1}, {1, 0.3}, {0.6, -1}, {-0.6, -1}, {-1, 0.3}};
 
-	math::Vector<double> triangle_pos {2, 2};
-	math::Vector<double> polygon_pos {2, 1};
+	// math::Vector<double> triangle_pos {2, 2};
+	// math::Vector<double> polygon_pos {2, 1};
 
-	double triangle_angle = 20.0;
-	double polygon_angle = 0.0;
+	// double triangle_angle = 20.0;
+	// double polygon_angle = 0.0;
 
 	// phy::Shape triangle = triangle_mather.ratation(triangle_angle);
 	// phy::Shape polygon = polygon_mather.ratation(polygon_angle);
 
-	phy::Shape triangle{{-1, -1}, {0, 1}, {1, -1}};
-	phy::Shape polygon{{0, 1}, {1, 0.3}, {0.6, -1}, {-0.6, -1}, {-1, 0.3}};
+	// phy::Shape triangle{{-1, -1}, {0, 1}, {1, -1}};
+	// phy::Shape polygon{{0, 1}, {1, 0.3}, {0.6, -1}, {-0.6, -1}, {-1, 0.3}};
 
 	// std::function <math::Vector<double>* (
 	// 		math::Vector<double>*, const double&, const bool&
 	// 	)> rotation_func = static_cast<math::Vector<double>* (*)(math::Vector<double>*, const double&, const bool&)> (math::Vector<double>::rotation);
 
-	triangle.transform(
-		&triangle, 
-		static_cast<math::Vector<double>* (*)(math::Vector<double>*, const double&, const bool&)> (math::Vector<double>::rotation),
-		triangle_angle,
-		false
-	);
+	// triangle.transform(
+	// 	&triangle, 
+	// 	static_cast<math::Vector<double>* (*)(math::Vector<double>*, const double&, const bool&)> (math::Vector<double>::rotation),
+	// 	triangle_angle,
+	// 	false
+	// );
 
-	polygon.transform(
-		&polygon, 
-		static_cast<math::Vector<double>* (*)(math::Vector<double>*, const double&, const bool&)> (math::Vector<double>::rotation),
-		polygon_angle,
-		false
-	);
+	// polygon.transform(
+	// 	&polygon, 
+	// 	static_cast<math::Vector<double>* (*)(math::Vector<double>*, const double&, const bool&)> (math::Vector<double>::rotation),
+	// 	polygon_angle,
+	// 	false
+	// );
 
 	// polygon.transform(
 	// 	&polygon, 
@@ -64,41 +67,71 @@ int main() {
 	// 	polygon_pos
 	// );
 
-	int count = 0;
-	auto vec = triangle.get_verties();
+	// int count = 0;
+	// auto vec = triangle.get_verties();
 
-	cout << "triangle : " << endl;
-	for(auto it : *vec) {
-		cout << "\t" << count << " : " << " ( ";
+	// cout << "triangle : " << endl;
+	// for(auto it : *vec) {
+	// 	cout << "\t" << count << " : " << " ( ";
 
-		for(int i = 0; i < it.size(); i++)
-			cout << it[i] << ", ";
+	// 	for(int i = 0; i < it.size(); i++)
+	// 		cout << it[i] << ", ";
 
-		cout << " ) " << endl;
-	}
+	// 	cout << " ) " << endl;
+	// }
 
-	count = 0;
-	vec = polygon.get_verties();
+	// count = 0;
+	// vec = polygon.get_verties();
 
-	cout << "polygon : " << endl;
-	for(auto it : *vec) {
-		cout << "\t" << count << " : " << " ( ";
+	// cout << "polygon : " << endl;
+	// for(auto it : *vec) {
+	// 	cout << "\t" << count << " : " << " ( ";
 
-		for(int i = 0; i < it.size(); i++)
-			cout << it[i] << ", ";
+	// 	for(int i = 0; i < it.size(); i++)
+	// 		cout << it[i] << ", ";
 
-		cout << " ) " << endl;
-	}
-	cout << " )" << endl;
+	// 	cout << " ) " << endl;
+	// }
+	// cout << " )" << endl;
 
-	phy::CollisionDetector_SAT detector;
-	auto result = detector.detect(
-		*triangle.get_verties(), triangle_pos, triangle_angle,
-		*polygon.get_verties(), polygon_pos, polygon_angle
-	); 
+	// phy::CollisionDetector_SAT detector;
+	// auto result = detector.detect(
+	// 	*triangle.get_verties(), triangle_pos, triangle_angle,
+	// 	*polygon.get_verties(), polygon_pos, polygon_angle
+	// ); 
 
-	cout << "state : " << result.state <<endl;
+	// cout << "state : " << result.state <<endl;
 	
+	// < Tiny XML 2 >
+	
+	XMLDocument xml;
+	XMLNode* p_node;
+	XMLNode* p_child_node;
+
+	XMLDeclaration* decl;
+	XMLElement* elem;
+	XMLComment* comm;
+	XMLAttribute* attr;
+	XMLText* text;
+
+	xml.LoadFile( "./resource/container/test.xml" );
+	std::cout << "./resource/container/test.xml : " << std::endl;
+
+	p_node = &xml;
+
+	for( 
+		p_child_node = (XMLNode*)p_node->FirstChild(); 
+		p_child_node != 0; 
+		p_child_node = (XMLNode*)p_child_node->NextSibling() 
+	) {
+		// if((decl = p_child_node->ToDeclaration()))	cout << "<Declation>";
+		if((elem = p_child_node->ToElement())) {
+			cout << "<Element> : " << endl;
+			cout << elem->Name() << endl;
+		}
+		// if((comm = p_child_node->ToComment()))		cout << "<Comment>";
+	}
+
 	cout << "test success" << endl;
 
 	return 0;

@@ -10,6 +10,7 @@ CMakeFiles/
 lib/
 Makefile
 main
+*.cmake
 
 # OS Files
 

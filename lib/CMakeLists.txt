@@ -16,6 +16,7 @@ include_directories(
 	assimp/code/
 	assimp/
 	stb/
+	tinyxml2/
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -32,6 +33,11 @@ set(OPENGL_LIBRARY
 	${GLFW_LIBRARIES}
 )
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+
+### TinyXML 2 ###
+
+add_subdirectory(tinyxml2)
 
 ### GLEW ###
 
