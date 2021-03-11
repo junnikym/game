@@ -16,13 +16,13 @@ include_directories(
 	assimp/code/
 	assimp/
 	stb/
-	tinyxml2/
+	di/include/
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 set(OPENGL_LIBRARY
 	${OPENGL_LIBRARY}
-	-lGL -lGLU -lXrandr -lXext -lX11 -lrt 
+	-lGL -lGLU -lXrandr -lXext -lX11 -lrt
 	${CMAKE_DL_LIBS}
 	${GLFW_LIBRARIES}
 )
@@ -34,10 +34,9 @@ set(OPENGL_LIBRARY
 )
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
+### DI ###
 
-### TinyXML 2 ###
-
-add_subdirectory(tinyxml2)
+add_subdirectory(di)
 
 ### GLEW ###
 
@@ -73,7 +72,7 @@ include_directories( assimp/code/BoostWorkaround )
 add_definitions( -DASSIMP_BUILD_BOOST_WORKAROUND )
 
 # Compile AssImp
-set( LIB_INSTALL_DIR "lib")
+set(LIB_INSTALL_DIR "lib")
 set(ZLIB_LIBRARIES zlib)
 set(BUILD_STATIC_LIB ON)
 set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/zlib)

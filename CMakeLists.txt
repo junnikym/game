@@ -19,7 +19,7 @@ include_directories(
 	lib/assimp/include/
 	lib/assimp/code/include/
 	lib/stb/
-	lib/tinyxml2/
+	lib/di/include
 )
 
 set(ALL_LIBS
@@ -27,7 +27,6 @@ set(ALL_LIBS
 	glfw
 	GLEW_LIB
 	assimp
-	tinyxml2
 )
 
 add_definitions(
@@ -47,10 +46,10 @@ add_definitions(
 
 ## < config > ##
 
-#configure_file(config/root.h.in config/root.h)
-#include_directories(
-#	${CMAKE_BINARY_DIR}/configuration
-#)
+# configure_file(config/root.h.in config/root.h)
+# include_directories(
+# 	${CMAKE_BINARY_DIR}/configuration
+# )
 
 ## < src > ##
 

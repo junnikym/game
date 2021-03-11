@@ -16,3 +16,6 @@
 [submodule "lib/tinyxml2"]
 	path = lib/tinyxml2
 	url = https://github.com/leethomason/tinyxml2.git
+[submodule "lib/di"]
+	path = lib/di
+	url = https://github.com/boost-ext/di.git

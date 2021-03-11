@@ -2,14 +2,14 @@
 #include <iostream>
 
 //#include "graphics/system.hpp"
-#include "./physics/shape.hpp"
-#include "./physics/collision.hpp"
-#include "./math/vector.hpp"
+// #include "./physics/shape.hpp"
+// #include "./physics/collision.hpp"
+// #include "./math/vector.hpp"
 
-#include <tinyxml2.h>
+#include <boost/di.hpp>
+namespace di = boost::di;
 
 using namespace std;
-using namespace tinyxml2;
 
 int main() {
 //	bool result = false;
@@ -101,36 +101,13 @@ int main() {
 	// ); 
 
 	// cout << "state : " << result.state <<endl;
-	
-	// < Tiny XML 2 >
-	
-	XMLDocument xml;
-	XMLNode* p_node;
-	XMLNode* p_child_node;
 
-	XMLDeclaration* decl;
-	XMLElement* elem;
-	XMLComment* comm;
-	XMLAttribute* attr;
-	XMLText* text;
+	const auto injector = di::make_injector(
+		di::bind<int>.to(42),
+		di::bind<double>.to(87.0)
+	);
 
-	xml.LoadFile( "./resource/container/test.xml" );
-	std::cout << "./resource/container/test.xml : " << std::endl;
-
-	p_node = &xml;
-
-	for( 
-		p_child_node = (XMLNode*)p_node->FirstChild(); 
-		p_child_node != 0; 
-		p_child_node = (XMLNode*)p_child_node->NextSibling() 
-	) {
-		// if((decl = p_child_node->ToDeclaration()))	cout << "<Declation>";
-		if((elem = p_child_node->ToElement())) {
-			cout << "<Element> : " << endl;
-			cout << elem->Name() << endl;
-		}
-		// if((comm = p_child_node->ToComment()))		cout << "<Comment>";
-	}
+	injector.create<example>();
 
 	cout << "test success" << endl;
 
