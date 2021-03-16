@@ -87,7 +87,7 @@ bool Graphics::initialize( int& screen_width, int& screen_height, const string& 
 	g_models.insert(
 		pair<string, Model>(
 			"cube",
-			Model("resource/object/backpack/backpack.obj")
+			Model("resource/object/basic_2d_objs/square/square.obj")
 	));
 // ----- ---------- ---------- ---------- ----- //
 // ----- ---------- ---------- ---------- ---- //
@@ -163,7 +163,7 @@ int Graphics::render() {
 	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	g_shaders.set_mat4("model", model);
-
+	
 	g_models.draw(g_shaders);
 */
 // ----- ---------- ---------- ---------- ----- //

@@ -51,8 +51,8 @@ class Entity {
 		Force* m_4d_force_ptr = nullptr;
 
 	public:
-		Entity(const math::Vector<double>& position);
-		Entity(const math::Vector<double>& position, math::Vector<double>& angle);
+		Entity(const math::Vector<double> position);
+		Entity(const math::Vector<double> position, math::Vector<double> angle);
 
 		~Entity();
 
@@ -60,7 +60,7 @@ class Entity {
 		void release();
 
 		math::Vector<double> position() const;
-		math::Vector<double> angle() const;		
+		math::Vector<double> angle() const;	
 
 		void position(math::Vector<double> position);
 		void angle(math::Vector<double> angle);

@@ -11,60 +11,70 @@ void Control::set_input(const Input* input_ptr) {
 }
 
 /****************************************************************************
- *	FourDirectionControl	| Class
+ *	ThreeWayControl	| Class
  * 
  *  Forward (Up), BackWard (Down), Left, Right Four Direction
  * Binary Control Module
  ****************************************************************************/
 
-FourDirectionControl::FourDirectionControl(
-	const unsigned int& up_key,
-	const unsigned int& down_key,
+ThreeWayControl::ThreeWayControl(
+	const unsigned int& front_key,
+	const unsigned int& back_key,
 	const unsigned int& left_key,
 	const unsigned int& right_key,
+	const unsigned int& up_key,
+	const unsigned int& down_key,
 	const Input*	   input_ptr
 ) {
 	m_input_ptr = input_ptr;
 
-	m_vertical = new BinaryControl(up_key, down_key);
-	m_horizontal = new BinaryControl(right_key, left_key);
+	m_front = new BinaryControl(front_key, back_key);
+	m_right = new BinaryControl(right_key, left_key);
+	m_up = new BinaryControl(up_key, down_key);
 }
 
-FourDirectionControl::~FourDirectionControl() {
+ThreeWayControl::~ThreeWayControl() {
 	this->release();
 }
 
-void FourDirectionControl::release() {
-	if(m_vertical != nullptr) {
-		delete m_vertical;
-		m_vertical = nullptr;
+void ThreeWayControl::release() {
+	if(m_front != nullptr) {
+		delete m_front;
+		m_front = nullptr;
 	}
 
-	if(m_horizontal != nullptr) {
-		delete m_horizontal;
-		m_horizontal = nullptr;
+	if(m_right != nullptr) {
+		delete m_right;
+		m_right = nullptr;
+	}
+
+	if(m_up != nullptr) {
+		delete m_up;
+		m_up = nullptr;
 	}
 }
 
-void FourDirectionControl::update() {
-	memset(m_buffer, 0, sizeof(int) * 4);
+void ThreeWayControl::update() {
+	m_buffer.set_zero();
+	double each_buf = 0;
 
-	int each_buf = 0;
+	if(m_right != nullptr && m_front != nullptr && m_up != nullptr) {
+		each_buf = (double)m_front->update(m_input_ptr);
+		m_buffer[(int)MOVEMENT_DIRECTION::right] = each_buf;
 
-	if(m_horizontal != nullptr && m_vertical != nullptr) {
-		each_buf = m_vertical->update(m_input_ptr);
+		each_buf = (double)m_right->update(m_input_ptr);
+		m_buffer[(int)MOVEMENT_DIRECTION::front] = each_buf;
 
-		m_buffer[(int)MOVEMENT_2D_ASIX::vertical] = each_buf;
-
-		each_buf = m_horizontal->update(m_input_ptr);
-
-		m_buffer[(int)MOVEMENT_2D_ASIX::horizontal] = each_buf;
+		each_buf = (double)m_up->update(m_input_ptr);
+		m_buffer[(int)MOVEMENT_DIRECTION::up] = each_buf;
 	}
 
 }
 
-void FourDirectionControl::get(int reciver[]) {
-	memcpy(reciver, m_buffer, 2 * sizeof(int));
+void ThreeWayControl::get_offset(int reciver[]) {
+	reciver[0] = m_buffer[0];
+	reciver[1] = m_buffer[1];
+	reciver[2] = m_buffer[2];
 }
 
 /****************************************************************************
@@ -109,7 +119,7 @@ int BinaryControl::update(const Input* input_ptr) {
 		if( pressed == 2 ) {
 			if(m_backup_buf == 0) {
 				m_backup_buf = m_key_buf;
-				m_key_buf = -m_key_buf;
+				m_key_buf 	 = -m_key_buf;
 			}
 		}
 
@@ -155,7 +165,7 @@ void MouseControl::update() {
 	m_offset =  m_input_ptr->get_mouse_offset() * m_cursor_speed;
 }
 
-void MouseControl::get(double reciver[]) {
+void MouseControl::get_offset(double reciver[]) {
 	reciver[0] = m_offset[0];
 	reciver[1] = m_offset[1];
 }

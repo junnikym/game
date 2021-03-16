@@ -7,6 +7,8 @@
 
 #include "matrix.hpp"
 
+#include <initializer_list>
+
 namespace math {
 
 
@@ -18,6 +20,7 @@ class Vector {
 		Vector(const Vector<T>& other);
 		Vector(std::initializer_list<T> il);
 		Vector(const T arr[]);
+		Vector(const vector3& vec);
 
 		// Get Functions
 		size_t size() const;
@@ -27,6 +30,7 @@ class Vector {
 		// Set Functions
 		void resize( size_t_r size );
 		void append( T elem );
+		void set_zero();
 
 		// Convert Functions
 		void to_arr(T reciver[]);
@@ -129,6 +133,10 @@ class Vector {
 		void rotation_z(const double& angle);
 
 	public:	
+
+	// assignment operator
+		Vector<T>& operator = (const vector3& rhs);
+
 	// Compound Assignment
 		Vector<T>& operator += (const Vector& rhs);
 		Vector<T>& operator -= (const Vector& rhs);

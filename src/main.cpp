@@ -1,32 +1,32 @@
 
 #include <iostream>
 
-//#include "graphics/system.hpp"
+#include "graphics/system.hpp"
 // #include "./physics/shape.hpp"
 // #include "./physics/collision.hpp"
 // #include "./math/vector.hpp"
 
-#include <boost/di.hpp>
-namespace di = boost::di;
+// #include <boost/di.hpp>
+// namespace di = boost::di;
 
 using namespace std;
 
 int main() {
-//	bool result = false;
-//	graphics::System system( "title", 800, 600);
+	bool result = false;
+	graphics::System system( "title", 800, 600);
 
-// #ifdef __OPENGL__
-// 	// @TODO : need to modify
-// 	g_input_msger.initialize(0, 0);
-// #endif /* __OPENGL__ */
+#ifdef __OPENGL__
+	// @TODO : need to modify
+	g_input_msger.initialize(0, 0);
+#endif /* __OPENGL__ */
 
-// 	result = system.initialize();
-// 	if( ! result )
-// 		return 1;
+	result = system.initialize();
+	if( ! result )
+		return 1;
 
-// 	system.run();
+	system.run();
 
-// 	system.shutdown(); 
+	system.shutdown(); 
 
 	// phy::Shape triangle_mather{{-1, -1}, {0, 1}, {1, -1}};
 	// phy::Shape polygon_mather{{0, 1}, {1, 0.3}, {0.6, -1}, {-0.6, -1}, {-1, 0.3}};
@@ -102,12 +102,12 @@ int main() {
 
 	// cout << "state : " << result.state <<endl;
 
-	const auto injector = di::make_injector(
-		di::bind<int>.to(42),
-		di::bind<double>.to(87.0)
-	);
+	// const auto injector = di::make_injector(
+	// 	di::bind<int>.to(42),
+	// 	di::bind<double>.to(87.0)
+	// );
 
-	injector.create<example>();
+	// injector.create<example>();
 
 	cout << "test success" << endl;
 

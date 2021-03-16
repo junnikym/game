@@ -30,8 +30,6 @@ Vector<double> Force::get() {
 }
 
 Vector<double> Force::update() {
-	cout << "exec Force updater" << endl;
-
 	update_timer();
 
 	return m_vec * ( m_delta_t * m_speed );

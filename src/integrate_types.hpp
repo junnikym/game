@@ -137,9 +137,10 @@ enum class MOVEMENT : unsigned int {
 	right	 = 3,
 };
 
-enum class MOVEMENT_2D_ASIX : unsigned int {
-	vertical = 1,
-	horizontal = 0,
+enum class MOVEMENT_DIRECTION : unsigned int {
+	right 	= 1,
+	front 	= 0,
+	up 		= 2,
 };
 
 enum class DIRECTION {

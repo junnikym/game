@@ -2,15 +2,15 @@
 
 namespace phy {
 
-Entity::Entity(const math::Vector<double>& position) {
-	m_position = math::Vector<double>(position);
+Entity::Entity(const math::Vector<double> position) {
+	m_position = std::move(position);
 
 	this->initialize();
 }
 
-Entity::Entity(const math::Vector<double>& position, math::Vector<double>& angle) {
-	m_position = math::Vector<double>(position);
-	m_angle = math::Vector<double>(angle);
+Entity::Entity(const math::Vector<double> position, math::Vector<double> angle) {
+	m_position = std::move(position);
+	m_angle = std::move(angle);
 
 	this->initialize();
 }
@@ -139,14 +139,15 @@ void Entity::input_updater(DictControlIt& it) {
 	switch(it->first) {
 		case input::ControlType::FourDirection:
 		{
-			int reciver[2] = { 0, };
-			it->second->get(reciver);
+			int reciver[3] = { 0, };
+			it->second->get_offset(reciver);
 
-			m_4d_force_ptr->set_vec( { (double)reciver[0], (double)reciver[1], 0 });
-			auto test =  m_4d_force_ptr->update();
-			m_position += test;
+			auto offset  = m_right 	* (float)reciver[0];
+				 offset += m_front 	* (float)reciver[1];
+				 offset += m_up		* (float)reciver[2];
 
-			//cout << test[0] << ", " << test[1] << ", " << test[2] << ", " << endl;
+			m_4d_force_ptr->set_vec( offset );
+			m_position += m_4d_force_ptr->get();
 			
 			return;
 		}
@@ -154,10 +155,11 @@ void Entity::input_updater(DictControlIt& it) {
 		case input::ControlType::MouseRotation:
 		{
 			double reciver[4] = { 0.0, };
-			it->second->get(reciver);
+			it->second->get_offset(reciver);
 
 			m_angle[0] += reciver[0];
 			m_angle[1] += reciver[1];
+
 			//m_angle[2] = std::move(reciver[2]);
 
 			/**

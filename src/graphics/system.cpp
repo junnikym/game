@@ -55,7 +55,7 @@ bool System::initialize() {
 		 */
 
 		glfwSetInputMode( 
-			m_graphics->get_window(), 
+			m_graphics->get_window(),
 			GLFW_CURSOR, 
 			GLFW_CURSOR_DISABLED
 		);
@@ -67,17 +67,19 @@ bool System::initialize() {
 			return false;
 	#endif /* __OPENGL, else */
 
-	m_graphics->set_screen_color(0.1, 0.1, 0.1, 1.0);
+	m_graphics->set_screen_color(1.0, 1.0, 1.0, 1.0);
 
 	/**
 	 * @ TODO : Delete under the code line
 	 * 			this code wrotten only for test
 	 */
-	main_cam_controller = ControlPtr( new FourDirectionControl(
-		GLFW_KEY_UP,
-		GLFW_KEY_DOWN,
-		GLFW_KEY_LEFT,
-		GLFW_KEY_RIGHT,
+	main_cam_controller = ControlPtr( new ThreeWayControl(
+		GLFW_KEY_W,
+		GLFW_KEY_S,
+		GLFW_KEY_A,
+		GLFW_KEY_D,
+		GLFW_KEY_SPACE,
+		GLFW_KEY_UNKNOWN,
 		m_input
 	));
 
@@ -88,6 +90,7 @@ bool System::initialize() {
 		input::ControlType::FourDirection, 
 		main_cam_controller
 	);
+	
 	main_cam.append_controller(
 		input::ControlType::MouseRotation, 
 		main_cam_mouse

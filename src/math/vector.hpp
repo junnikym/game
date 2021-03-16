@@ -14,13 +14,18 @@ Vector<T>::Vector(const Vector<T>& other) {
 }
 
 template <class T>
-Vector<T>::Vector(std::initializer_list<T> il) : memory(il) {
+Vector<T>::Vector(std::initializer_list<T> il) : memory(il) { 
 	m_size = il.size();
 }
 
 template <class T>
 Vector<T>::Vector(const T arr[]) {
 	memory = std::vector(std::begin(arr), std::end(arr));
+}
+
+template <class T>
+Vector<T>::Vector(const vector3& vec) {
+	memory = std::vector<T>{vec.x, vec.y, vec.z};
 }
 
 /* ==================================================
@@ -60,6 +65,8 @@ void Vector<T>::to_arr(T reciver[]) {
 template <class T>
 void Vector<T>::normalize() {
 	double length = this->length();
+
+	if(!length) return;
 
 	for(auto& it : memory)
 		it /= length;
@@ -221,6 +228,26 @@ template <class T>
 void Vector<T>::resize( size_t_r size ) {
 	this->memory.resize(size);
 	this->m_size = size;
+}
+
+template <class T>
+void Vector<T>::set_zero() {
+	for(int i = 0; i < m_size; i++) {
+		memory[i] = 0;
+	}
+}
+
+/* ==================================================
+ * assignment operator
+ ================================================== */
+
+template <class T>
+Vector<T>& Vector<T>::operator = (const vector3& rhs) {
+	memory[0] = rhs.x;
+	memory[1] = rhs.y;
+	memory[2] = rhs.z;
+
+	return *this;
 }
 
 /* ==================================================
@@ -397,7 +424,8 @@ T& Vector<T>::operator [] (const int& index) {
 }
 
 template <class T>
-vector3 Vector<T>:: convert_to_vec3() {
+vector3 Vector<T>::convert_to_vec3() {
+	
 	vector3 result = {
 		this->memory[0],
 		this->memory[1],

@@ -37,7 +37,7 @@ Camera::Camera(
 void Camera::intialize() {
 	this->position 	= vector3(0.0f, 0.0f, 0.0f);
 	this->up 		= vector3(0.0f, 1.0f, 0.0f);
-	this->world_up =  this->up;
+	this->world_up =  vector3(0.0f, 1.0f, 0.0f);
 
 	this->axis[0] 	= __CAM_DEFAULT_YAW;
 	this->axis[1] 	= __CAM_DEFAULT_PITCH;

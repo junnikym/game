@@ -14,7 +14,7 @@ enum class ControlType {
 
 class Control;
 class BinaryControl;
-class FourDirectionControl;
+class ThreeWayControl;
 class MouseControl;
 
 using ControlPtr = std::shared_ptr<Control>;
@@ -29,25 +29,27 @@ class Control {
 		virtual ~Control() { }
 		
 		virtual void update() { }
-		virtual void get(int reciver[]) { }
-		virtual void get(double reciver[]) { }
+		virtual void get_offset(int reciver[]) { }
+		virtual void get_offset(double reciver[]) { }
 
 		void set_input(const Input* input_ptr);
 	protected:
 		const Input* m_input_ptr = nullptr;
 };
 
-class FourDirectionControl : public Control {
+class ThreeWayControl : public Control {
 	public:
-		FourDirectionControl(
-			const unsigned int& up_key,
-			const unsigned int& down_key,
+		ThreeWayControl(
+			const unsigned int& front_key,
+			const unsigned int& back_key,
 			const unsigned int& left_key,
 			const unsigned int& right_key,
+			const unsigned int& up_key,
+			const unsigned int& down_key,
 			const Input*		input_ptr
 		);
 
-		~FourDirectionControl();
+		~ThreeWayControl();
 
 		void release();
 
@@ -57,13 +59,14 @@ class FourDirectionControl : public Control {
 		 *  inheritance from Control class
 		 */
 		void update();
-		void get(int reciver[]);
+		void get_offset(int reciver[]);
 		 
 	private:
-		BinaryControl* m_vertical = nullptr;
-		BinaryControl* m_horizontal = nullptr;
+		BinaryControl* m_right	= nullptr;
+		BinaryControl* m_front	= nullptr;
+		BinaryControl* m_up 	= nullptr;
 
-		int m_buffer[2] = {0};
+		math::Vector<double> m_buffer = {0.0, 0.0, 0.0};
 };
 
 class BinaryControl {
@@ -109,7 +112,7 @@ class MouseControl : public Control {
 		 *  inheritance from Control class
 		 */
 		void update();
-		void get(double reciver[]);
+		void get_offset(double reciver[]);
 
 		/**	
 		 * setting member :
